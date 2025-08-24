@@ -58,5 +58,6 @@ async def update_user(user_id: str, payload: UserRequest = Body(..., embed=True)
     user.name = payload.name
     user.email = payload.email
     user.password_hash = payload.password
+    user.updated_at = datetime.now(UTC).isoformat()
     await user_service.update_user_by_id(user_id=user_id, user=user)
     return JSONResponse(status_code=200, content=user.model_dump(exclude={"password_hash"}))
