@@ -1,0 +1,1 @@
+pip install -e ./auth_service
