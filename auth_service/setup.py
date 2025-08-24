@@ -4,7 +4,7 @@ setup(
     name="auth_service",
     version="0.0.1",
     packages=find_packages(),
-    install_requires=["uvicorn==0.35.0", "errorhub==0.1.8", "bcrypt==4.3.0"],
+    install_requires=["uvicorn==0.35.0", "errorhub==0.1.8", "bcrypt==4.3.0", "email_validator==2.2.0"],
     entry_points={
         "console_scripts": [],
     },
