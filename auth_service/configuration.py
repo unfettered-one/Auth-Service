@@ -16,7 +16,6 @@ class Settings:
 
     def __init__(self) -> None:
         self._config = {}
-        
 
         self.load_env_variable()
 
@@ -26,6 +25,8 @@ class Settings:
         with open(config_json, encoding="utf-8") as f:
             self._config = json.load(f)
 
+    def get_user_json_record_path(self) -> str:
+        return self._config.get("userJsonRecord", "No path found")
 
 
 settings = Settings()
