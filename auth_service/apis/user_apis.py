@@ -40,3 +40,11 @@ async def delete_user(user_id: str):
     user_service = factory.get_user_service()
     await user_service.delete_user(user_id)
     return Response(status_code=204)
+
+
+@router.get("/users/{user_id}", tags=["Users"], responses={})
+@api_exception_handler
+async def get_user(user_id: str, email: str | None = None):
+    user_service = factory.get_user_service()
+    user = await user_service.get_user_info(user_id=user_id, user_email=email)
+    return JSONResponse(status_code=200, content=user.model_dump(exclude={"password_hash"}))

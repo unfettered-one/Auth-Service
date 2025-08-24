@@ -1,7 +1,7 @@
 from models.users import User
 from logic.interfaces.iuser_respository import IUserRepository
 from logic.interfaces.ibase_strategy import IBaseStrategy
-from errorhub.exceptions import ConflictException, NotFoundException
+from errorhub.exceptions import ConflictException, NotFoundException, BadRequestException
 from errorhub.models import ErrorSeverity
 
 
@@ -40,14 +40,16 @@ class UserService(object):
         await self.user_repository.update_user(user)
         return user
 
-    async def get_user_info(self, user_id: str | None, user_email: str | None) -> dict | User:
+    async def get_user_info(self, user_id: str | None, user_email: str | None) -> User:
         if not user_id and not user_email:
-            return {"error": "User id or email is required"}
+            raise BadRequestException(
+                service="auth_service", message="user_id or user_email must be provided", severity=ErrorSeverity.LOW
+            )
         if user_id:
             user = await self.user_repository.get_user_by_id(user_id)
         elif user_email:
             user = await self.user_repository.get_user_by_email(user_email)
 
         if user is None:
-            return {"error": "User not found"}
+            raise NotFoundException(service="auth_service", message="User not found", severity=ErrorSeverity.LOW)
         return user
