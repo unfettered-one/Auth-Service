@@ -1,0 +1,33 @@
+[MASTER]
+# Ignore common folders you don't want to lint
+ignore=venv,.venv,__pycache__,migrations,tests,models,.devcontainer,.vscode
+
+# Set Python version
+py-version=3.11
+
+[MESSAGES CONTROL]
+# Disable overly strict or unnecessary warnings
+disable=
+    R0903,  # Too few public methods (common for models)
+    R0913,  # Too many arguments in function
+    R0917,  # Too many positional arguments
+    R0902,  # Too many instance attributes
+    R0914,  # Too many local variables
+
+[FORMAT]
+max-line-length=119
+
+[BASIC]
+good-names=i,j,k,x,y,z,_,id,pk
+
+[DESIGN]
+max-args=8
+max-attributes=12
+
+[TYPECHECK]
+# Allow dynamically loaded attributes for FastAPI and ORMs
+generated-members=requests.*,sqlalchemy.*,pydantic.*
+
+[REPORTS]
+# Only show score summary if desired (set to yes to see)
+reports=no

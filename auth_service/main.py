@@ -1,8 +1,12 @@
+"""
+Entry point for the Auth-Service API.
+"""
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from errorhub.exceptions import ErrorHubException
-
 from fastapi.responses import JSONResponse
+
+from errorhub.exceptions import ErrorHubException
 from apis.user_apis import router as user_router
 
 app = FastAPI(
