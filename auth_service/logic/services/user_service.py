@@ -5,13 +5,15 @@ from models.users import User
 class UserService(object):
     def __init__(self):
         self.user_repository = Factory.get_user_repository()
+        self.base_strategy = Factory.get_base_strategy()
 
     async def register_user(self, user: User) -> dict | User:
         if await self.user_repository.get_user_by_id(str(user.id)) is not None:
             return {"error": "User Id already exists"}
         if await self.user_repository.get_user_by_email(user.email) is not None:
             return {"error": "Email already exists"}
-
+        hashed_password = self.base_strategy.hash_password(user.password_hash)
+        user.password_hash = hashed_password
         await self.user_repository.create_user(user)
         return user
 
@@ -40,5 +42,3 @@ class UserService(object):
         if user is None:
             return {"error": "User not found"}
         return user
-    
-

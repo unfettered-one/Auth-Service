@@ -2,7 +2,7 @@ from auth_service.logic.services.user_service import UserService
 from logic.interfaces.iuser_respository import IUserRepository
 from logic.repository.user_repository import JsonUserRepository
 from logic.interfaces.ibase_strategy import IBaseStrategy
-from logic.startegies.password_startegy import PasswordStrategy
+from logic.startegies.password_startegy import BcryptPasswordStrategy
 
 
 class Factory(object):
@@ -16,4 +16,4 @@ class Factory(object):
 
     @staticmethod
     def get_base_strategy() -> IBaseStrategy:
-        return PasswordStrategy()
+        return BcryptPasswordStrategy()
