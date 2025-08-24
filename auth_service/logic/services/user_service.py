@@ -1,7 +1,7 @@
 from models.users import User
 from logic.interfaces.iuser_respository import IUserRepository
 from logic.interfaces.ibase_strategy import IBaseStrategy
-from errorhub.exceptions import ConflictException
+from errorhub.exceptions import ConflictException, NotFoundException
 from errorhub.models import ErrorSeverity
 
 
@@ -22,12 +22,16 @@ class UserService(object):
         user_created = await self.user_repository.create_user(user)
         return user_created
 
-    async def delete_user(self, user_id: str) -> dict:
+    async def delete_user(self, user_id: str) -> None:
         if await self.user_repository.get_user_by_id(user_id) is None:
-            return {"error": "User not found"}
+            raise NotFoundException(
+                service="auth_service",
+                message="User not found",
+                severity=ErrorSeverity.LOW,
+                context={"The user you are trying to delete is not found": user_id},
+            )
 
         await self.user_repository.delete_user(user_id)
-        return {"message": "User deleted successfully"}
 
     async def update_user_by_id(self, user_id: str, user: User) -> dict | User:
         if await self.user_repository.get_user_by_id(user_id) is None:

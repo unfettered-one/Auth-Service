@@ -1,6 +1,6 @@
 from datetime import datetime, UTC
 from fastapi import APIRouter, Body
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
 from errorhub.decorator import api_exception_handler
 from models.users import User, UserRequest
 import uuid
@@ -10,7 +10,7 @@ router = APIRouter()
 
 
 @router.post(
-    "/register",
+    "/users",
     tags=["Users"],
     responses={},
 )
@@ -32,3 +32,11 @@ async def register_user(
         status_code=201,
         content={"message": "User registered successfully", **user_created.model_dump(exclude={"password_hash"})},
     )
+
+
+@router.delete("/users/{user_id}", tags=["Users"], responses={})
+@api_exception_handler
+async def delete_user(user_id: str):
+    user_service = factory.get_user_service()
+    await user_service.delete_user(user_id)
+    return Response(status_code=204)
