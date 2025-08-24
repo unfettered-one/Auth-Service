@@ -4,9 +4,11 @@ Connection between user apis and user repository.
 
 from models.users import User
 from logic.interfaces.iuser_respository import IUserRepository
-from logic.interfaces.ibase_strategy import IBaseStrategy
+from utils.password import hash_password
+
 from errorhub.exceptions import ConflictException, NotFoundException, BadRequestException
 from errorhub.models import ErrorSeverity
+
 from configuration import settings
 
 
@@ -16,9 +18,8 @@ class UserService:
     This layer connects the user repository and api layer together.
     """
 
-    def __init__(self, user_repo: IUserRepository, base_strategy: IBaseStrategy):
+    def __init__(self, user_repo: IUserRepository):
         self.user_repository = user_repo
-        self.base_strategy = base_strategy
 
     async def register_user(self, user: User) -> User:
         """
@@ -38,7 +39,7 @@ class UserService:
                 severity=ErrorSeverity.LOW,
                 environment=settings.get_environment(),
             )
-        hashed_password = self.base_strategy.hash_password(user.password_hash)
+        hashed_password = await hash_password(user.password_hash)
         user.password_hash = hashed_password
         user_created = await self.user_repository.create_user(user)
         return user_created
