@@ -1,9 +1,16 @@
+"""
+Apis to register or handle users.
+"""
+
+import uuid
 from datetime import datetime, UTC
+
 from fastapi import APIRouter, Body
 from fastapi.responses import JSONResponse, Response
+
 from errorhub.decorator import api_exception_handler
+
 from models.users import User, UserRequest
-import uuid
 from logic.factory import factory
 
 router = APIRouter()
@@ -18,6 +25,9 @@ router = APIRouter()
 async def register_user(
     payload: UserRequest = Body(..., embed=True),
 ):
+    """
+    Api to create user
+    """
     user_id = str(uuid.uuid4())
     user = User(
         id=user_id,
@@ -37,6 +47,9 @@ async def register_user(
 @router.delete("/users/{user_id}", tags=["Users"], responses={})
 @api_exception_handler
 async def delete_user(user_id: str):
+    """
+    Api to delete a user by user_id
+    """
     user_service = factory.get_user_service()
     await user_service.delete_user(user_id)
     return Response(status_code=204)
@@ -45,6 +58,9 @@ async def delete_user(user_id: str):
 @router.get("/users/{user_id}", tags=["Users"], responses={})
 @api_exception_handler
 async def get_user(user_id: str, email: str | None = None):
+    """
+    Api to get user information either by user_id or email
+    """
     user_service = factory.get_user_service()
     user = await user_service.get_user_info(user_id=user_id, user_email=email)
     return JSONResponse(status_code=200, content=user.model_dump(exclude={"password_hash"}))
@@ -53,6 +69,9 @@ async def get_user(user_id: str, email: str | None = None):
 @router.put("/users/{user_id}", tags=["Users"], responses={})
 @api_exception_handler
 async def update_user(user_id: str, payload: UserRequest = Body(..., embed=True), email: str | None = None):
+    """
+    Api to update user or return proper exceptions for errors
+    """
     user_service = factory.get_user_service()
     user = await user_service.get_user_info(user_id=user_id, user_email=email)
     user.name = payload.name

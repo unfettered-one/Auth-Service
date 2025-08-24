@@ -1,8 +1,16 @@
+"""
+basic password hashing and verification strategy using bcrypt.
+"""
+
 from logic.interfaces.ibase_strategy import IBaseStrategy
 import bcrypt
 
 
 class BcryptPasswordStrategy(IBaseStrategy):
+    """
+    Class for basic password hashing and verification strategy using bcrypt.
+    """
+
     def hash_password(self, password: str) -> str:
         return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
 
