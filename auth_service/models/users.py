@@ -12,3 +12,11 @@ class User(BaseModel):
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     apps: list[str] = []
     model_config = ConfigDict(extra="forbid")
+
+
+class UserRequest(BaseModel):
+    name: str | None = None
+    email: EmailStr
+    password: str
+    app_name: str
+    model_config = ConfigDict(extra="forbid")
