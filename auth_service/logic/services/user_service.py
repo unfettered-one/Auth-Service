@@ -3,6 +3,7 @@ from logic.interfaces.iuser_respository import IUserRepository
 from logic.interfaces.ibase_strategy import IBaseStrategy
 from errorhub.exceptions import ConflictException, NotFoundException, BadRequestException
 from errorhub.models import ErrorSeverity
+from configuration import settings
 
 
 class UserService(object):
@@ -13,10 +14,18 @@ class UserService(object):
     async def register_user(self, user: User) -> User:
         if await self.user_repository.get_user_by_id(str(user.id)) is not None:
             raise ConflictException(
-                service="auth_service", message="User Id already exists", severity=ErrorSeverity.LOW
+                service="auth_service",
+                message="User Id already exists",
+                severity=ErrorSeverity.LOW,
+                environment=settings.get_environment(),
             )
         if await self.user_repository.get_user_by_email(user.email) is not None:
-            raise ConflictException(service="auth_service", message="Email already exists", severity=ErrorSeverity.LOW)
+            raise ConflictException(
+                service="auth_service",
+                message="Email already exists",
+                severity=ErrorSeverity.LOW,
+                environment=settings.get_environment(),
+            )
         hashed_password = self.base_strategy.hash_password(user.password_hash)
         user.password_hash = hashed_password
         user_created = await self.user_repository.create_user(user)
@@ -29,6 +38,7 @@ class UserService(object):
                 message="User not found",
                 severity=ErrorSeverity.LOW,
                 context={"The user you are trying to delete is not found": user_id},
+                environment=settings.get_environment(),
             )
 
         await self.user_repository.delete_user(user_id)
@@ -43,7 +53,10 @@ class UserService(object):
     async def get_user_info(self, user_id: str | None, user_email: str | None) -> User:
         if not user_id and not user_email:
             raise BadRequestException(
-                service="auth_service", message="user_id or user_email must be provided", severity=ErrorSeverity.LOW
+                service="auth_service",
+                message="user_id or user_email must be provided",
+                severity=ErrorSeverity.LOW,
+                environment=settings.get_environment(),
             )
         if user_id:
             user = await self.user_repository.get_user_by_id(user_id)
@@ -51,5 +64,10 @@ class UserService(object):
             user = await self.user_repository.get_user_by_email(user_email)
 
         if user is None:
-            raise NotFoundException(service="auth_service", message="User not found", severity=ErrorSeverity.LOW)
+            raise NotFoundException(
+                service="auth_service",
+                message="User not found",
+                severity=ErrorSeverity.LOW,
+                environment=settings.get_environment(),
+            )
         return user
