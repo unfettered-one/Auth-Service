@@ -1,21 +1,26 @@
-from factory import Factory
 from models.users import User
+from logic.interfaces.iuser_respository import IUserRepository
+from logic.interfaces.ibase_strategy import IBaseStrategy
+from errorhub.exceptions import ConflictException
+from errorhub.models import ErrorSeverity
 
 
 class UserService(object):
-    def __init__(self):
-        self.user_repository = Factory.get_user_repository()
-        self.base_strategy = Factory.get_base_strategy()
+    def __init__(self, user_repo: IUserRepository, base_strategy: IBaseStrategy):
+        self.user_repository = user_repo
+        self.base_strategy = base_strategy
 
-    async def register_user(self, user: User) -> dict | User:
+    async def register_user(self, user: User) -> User:
         if await self.user_repository.get_user_by_id(str(user.id)) is not None:
-            return {"error": "User Id already exists"}
+            raise ConflictException(
+                service="auth_service", message="User Id already exists", severity=ErrorSeverity.LOW
+            )
         if await self.user_repository.get_user_by_email(user.email) is not None:
-            return {"error": "Email already exists"}
+            raise ConflictException(service="auth_service", message="Email already exists", severity=ErrorSeverity.LOW)
         hashed_password = self.base_strategy.hash_password(user.password_hash)
         user.password_hash = hashed_password
-        await self.user_repository.create_user(user)
-        return user
+        user_created = await self.user_repository.create_user(user)
+        return user_created
 
     async def delete_user(self, user_id: str) -> dict:
         if await self.user_repository.get_user_by_id(user_id) is None:

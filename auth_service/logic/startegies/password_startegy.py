@@ -1,4 +1,4 @@
-from interfaces.ibase_strategy import IBaseStrategy
+from logic.interfaces.ibase_strategy import IBaseStrategy
 import bcrypt
 
 

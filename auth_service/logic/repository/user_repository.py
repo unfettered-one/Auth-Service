@@ -10,10 +10,11 @@ class JsonUserRepository(IUserRepository):
 
         self.user_dict = json.load(open(self.file_path, encoding="utf-8"))
 
-    async def create_user(self, user: User):
-        self.user_dict[user.id] = user.model_dump()
+    async def create_user(self, user: User) -> User:
+        self.user_dict[str(user.id)] = user.model_dump()
         with open(self.file_path, "w", encoding="utf-8") as f:
             json.dump(self.user_dict, f, indent=4, default=str)
+        return user
 
     async def get_user_by_email(self, email: str):
         for user in self.user_dict.values():

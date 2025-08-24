@@ -12,8 +12,13 @@ class Factory(object):
 
     @staticmethod
     def get_user_service() -> UserService:
-        return UserService()
+        user_repo = JsonUserRepository()
+        base_strategy = BcryptPasswordStrategy()
+        return UserService(user_repo, base_strategy)
 
     @staticmethod
     def get_base_strategy() -> IBaseStrategy:
         return BcryptPasswordStrategy()
+
+
+factory = Factory()
