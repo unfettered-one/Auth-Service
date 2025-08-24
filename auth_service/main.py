@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from errorhub.exceptions import ErrorHubException
 
 from fastapi.responses import JSONResponse
+from apis.user_apis import router as user_router
 
 app = FastAPI(
     title="Auth-Service",
@@ -16,6 +17,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(user_router)
 
 
 # Global Exception Handler

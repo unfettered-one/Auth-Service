@@ -1,14 +1,21 @@
 from pydantic import BaseModel, ConfigDict, Field, EmailStr
-from datetime import datetime, timezone
-from uuid import UUID, uuid4
+from datetime import datetime, UTC
 
 
 class User(BaseModel):
-    id: UUID = Field(default_factory=uuid4)
+    id: str
     name: str | None = None
     email: EmailStr
-    password_hash: str = Field(..., exclude=True)
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    password_hash: str = Field(...)
+    created_at: str = Field(default_factory=lambda: datetime.now(UTC).isoformat())
+    updated_at: str = Field(default_factory=lambda: datetime.now(UTC).isoformat())
+    apps: list[str] = []
+    model_config = ConfigDict(extra="forbid")
 
+
+class UserRequest(BaseModel):
+    name: str | None = None
+    email: EmailStr
+    password: str
+    app_name: str
     model_config = ConfigDict(extra="forbid")
