@@ -1,18 +1,47 @@
 """
-basic password hashing and verification strategy using bcrypt.
+Basic email/password authentication strategy
 """
 
-from logic.interfaces.ibase_strategy import IBaseStrategy
-import bcrypt
+from interfaces.iauth_strategy import IAuthStrategy
+from interfaces.iuser_respository import IUserRepository
+from utils.password import verify_password
+
+from errorhub.exceptions import NotFoundException, UnauthorizedException
+from errorhub.models import ErrorSeverity
+
+from configuration import settings
+from models.users import User
 
 
-class BcryptPasswordStrategy(IBaseStrategy):
-    """
-    Class for basic password hashing and verification strategy using bcrypt.
-    """
+class EmailPasswordStrategy(IAuthStrategy):
+    def __init__(self, user_repository: IUserRepository):
+        self.user_repository = user_repository
 
-    def hash_password(self, password: str) -> str:
-        return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
+    async def authenticate(self, credentials: dict) -> User:
+        email = credentials["email"]
+        password = credentials["password"]
 
-    def verify_password(self, plain_password: str, hashed_password: str) -> bool:
-        return bcrypt.checkpw(plain_password.encode("utf-8"), hashed_password.encode("utf-8"))
+        user = await self.user_repository.get_user_by_email(email)
+        if not user:
+            raise NotFoundException(
+                service="Auth Service",
+                message="User not found",
+                severity=ErrorSeverity.LOW,
+                environment=settings.get_environment(),
+                context={
+                    "detail": " No registered user found for authentication.",
+                    "suggestion": "Register first please... or enter correct email",
+                },
+            )
+        if user and verify_password(password, user.password_hash):
+            return user
+        raise UnauthorizedException(
+            service="Auth Service",
+            message="Invalid credentials",
+            severity=ErrorSeverity.LOW,
+            environment=settings.get_environment(),
+            context={
+                "detail": "Authentication failed",
+                "suggestion": "Please enter correct password",
+            },
+        )

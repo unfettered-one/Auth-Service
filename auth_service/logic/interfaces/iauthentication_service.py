@@ -12,25 +12,13 @@ class IAuthenticationService(ABC):
     """
 
     @abstractmethod
-    async def login(self, email: str, password: str) -> dict | User:
+    async def login(self, credentials: dict, strategy_name: str) -> dict | User:
         """
-        Login user with email and password
+        Login with different strategies, eg (email and password),google, microsoft
         """
 
     @abstractmethod
-    async def logout(self, user_id: str) -> dict:
+    async def logout(self, user_id: str, strategy_name: str) -> dict:
         """
         Logout user with user_id
-        """
-
-    @abstractmethod
-    async def verify_token(self, token: str) -> dict | User:
-        """
-        Verify user token
-        """
-
-    @abstractmethod
-    async def refresh_token(self, refresh_token: str) -> dict:
-        """
-        Refresh user token
         """
