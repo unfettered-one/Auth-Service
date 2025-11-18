@@ -2,7 +2,6 @@
 Apis to register or handle users.
 """
 
-import uuid
 from datetime import datetime, UTC
 
 from fastapi import APIRouter, Body
@@ -12,6 +11,7 @@ from errorhub.decorator import api_exception_handler
 
 from models.users import User, UserRequest
 from logic.factory import factory
+from utils.helper import generate_user_id
 
 router = APIRouter()
 
@@ -28,7 +28,7 @@ async def register_user(
     """
     Api to create user
     """
-    user_id = str(uuid.uuid4())
+    user_id = await generate_user_id()
     user = User(
         id=user_id,
         name=payload.name,

@@ -31,7 +31,7 @@ class JsonUserRepository(IUserRepository):
             json.dump(self.user_dict, f, indent=4, default=str)
         return user
 
-    async def get_user_by_email(self, email: str):
+    async def get_user_by_email(self, email: str) -> User | None:
         """
         find user by email
         """
