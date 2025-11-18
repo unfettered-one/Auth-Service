@@ -8,7 +8,7 @@ from logic.services.authentication_service import AuthenticationService
 
 from logic.interfaces.iauth_strategy import IAuthStrategy
 from logic.startegies.password_startegy import EmailPasswordStrategy
-
+from logic.interfaces.iauthentication_service import IAuthenticationService
 from logic.services.jwt_token_service import JWTTokenService
 from configuration import settings
 
@@ -27,7 +27,7 @@ class Factory:
         return UserService(user_repo)
 
     @staticmethod
-    def get_authentication_service() -> AuthenticationService:
+    def get_authentication_service() -> IAuthenticationService:
         """
         Returns an instance of the authentication service
         """

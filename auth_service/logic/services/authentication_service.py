@@ -64,7 +64,7 @@ class AuthenticationService(IAuthenticationService):
             "refresh_token": refresh_token,
         }
 
-    async def logout(self, refresh_token: str, strategy_name: str) -> dict:
+    async def logout(self, refresh_token: str) -> dict:
         """
         Logout by revoking the refresh token.
         """
