@@ -8,6 +8,7 @@ from fastapi.responses import JSONResponse
 
 from errorhub.exceptions import ErrorHubException
 from apis.user_apis import router as user_router
+from apis.auth_apis import router as auth_router
 
 app = FastAPI(
     title="Auth-Service",
@@ -23,6 +24,7 @@ app.add_middleware(
 )
 
 app.include_router(user_router)
+app.include_router(auth_router)
 
 
 # Global Exception Handler

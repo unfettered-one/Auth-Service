@@ -5,6 +5,11 @@
         "description": "API for Auth-Service",
         "version": "0.1.0"
     },
+    "servers": [
+        {
+            "url": "http://0.0.0.0:8000"
+        }
+    ],
     "paths": {
         "/users": {
             "post": {
@@ -206,6 +211,56 @@
                     }
                 }
             }
+        },
+        "/auth/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "User login",
+                "description": "User login endpoint",
+                "operationId": "login_auth_login_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginRequestModel"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "201": {
+                        "description": "Login successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LoginResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -247,6 +302,72 @@
                 "type": "object",
                 "title": "HTTPValidationError"
             },
+            "LoginModel": {
+                "properties": {
+                    "strategy": {
+                        "type": "string",
+                        "title": "Strategy"
+                    },
+                    "credentials": {
+                        "additionalProperties": true,
+                        "type": "object",
+                        "title": "Credentials"
+                    }
+                },
+                "additionalProperties": false,
+                "type": "object",
+                "required": [
+                    "strategy",
+                    "credentials"
+                ],
+                "title": "LoginModel"
+            },
+            "LoginRequestModel": {
+                "properties": {
+                    "data": {
+                        "$ref": "#/components/schemas/LoginModel"
+                    }
+                },
+                "additionalProperties": false,
+                "type": "object",
+                "required": [
+                    "data"
+                ],
+                "title": "LoginRequestModel"
+            },
+            "LoginResponse": {
+                "properties": {
+                    "user": {
+                        "$ref": "#/components/schemas/UserResponse"
+                    },
+                    "access_token": {
+                        "type": "string",
+                        "title": "Access Token"
+                    },
+                    "refresh_token": {
+                        "type": "string",
+                        "title": "Refresh Token"
+                    },
+                    "token_type": {
+                        "type": "string",
+                        "title": "Token Type",
+                        "default": "bearer"
+                    },
+                    "expires_in": {
+                        "type": "integer",
+                        "title": "Expires In",
+                        "default": 900
+                    }
+                },
+                "additionalProperties": false,
+                "type": "object",
+                "required": [
+                    "user",
+                    "access_token",
+                    "refresh_token"
+                ],
+                "title": "LoginResponse"
+            },
             "UserRequest": {
                 "properties": {
                     "name": {
@@ -282,6 +403,45 @@
                     "app_name"
                 ],
                 "title": "UserRequest"
+            },
+            "UserResponse": {
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "title": "Id"
+                    },
+                    "name": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Name"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "title": "Email"
+                    },
+                    "apps": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array",
+                        "title": "Apps"
+                    }
+                },
+                "additionalProperties": false,
+                "type": "object",
+                "required": [
+                    "id",
+                    "email",
+                    "apps"
+                ],
+                "title": "UserResponse"
             },
             "ValidationError": {
                 "properties": {
