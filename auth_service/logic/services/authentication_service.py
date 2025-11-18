@@ -2,8 +2,8 @@
 Authentication service is layer between Auth strategies like email/password, google..etc and Auth apis
 """
 
-from interfaces.iauthentication_service import IAuthenticationService
-from interfaces.iauth_strategy import IAuthStrategy
+from logic.interfaces.iauthentication_service import IAuthenticationService
+from logic.interfaces.iauth_strategy import IAuthStrategy
 from models.users import User
 
 

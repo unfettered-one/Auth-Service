@@ -2,8 +2,8 @@
 Basic email/password authentication strategy
 """
 
-from interfaces.iauth_strategy import IAuthStrategy
-from interfaces.iuser_respository import IUserRepository
+from logic.interfaces.iauth_strategy import IAuthStrategy
+from logic.interfaces.iuser_respository import IUserRepository
 from utils.password import verify_password
 
 from errorhub.exceptions import NotFoundException, UnauthorizedException

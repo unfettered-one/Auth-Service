@@ -7,7 +7,7 @@ from logic.services.user_service import UserService
 
 from logic.services.authentication_service import AuthenticationService
 
-from interfaces.iauth_strategy import IAuthStrategy
+from logic.interfaces.iauth_strategy import IAuthStrategy
 from logic.startegies.password_startegy import EmailPasswordStrategy
 
 

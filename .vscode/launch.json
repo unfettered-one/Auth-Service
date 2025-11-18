@@ -16,6 +16,7 @@
             "envFile": "${workspaceFolder}/.local/.env",
             "env": {
                 "PYTEST_ADDOPTS": "--no-cov",
+                "PYTHONPATH": "${workspaceFolder}/auth_service"
             }
         }
     ]
