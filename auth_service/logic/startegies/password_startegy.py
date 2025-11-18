@@ -17,7 +17,7 @@ class EmailPasswordStrategy(IAuthStrategy):
     def __init__(self, user_repository: IUserRepository):
         self.user_repository = user_repository
 
-    async def authenticate(self, credentials: dict) -> User:
+    async def authenticate(self, credentials: dict) -> User | None:
         email = credentials["email"]
         password = credentials["password"]
 

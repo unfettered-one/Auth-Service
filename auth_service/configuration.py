@@ -22,6 +22,7 @@ class Settings:
     def __init__(self) -> None:
         self._config = {}
         self.load_env_variable()
+        self._jwt_secret_key = os.getenv("JWT_SECRET_KEY", None)
 
     def load_env_variable(self):
         """
@@ -53,6 +54,12 @@ class Settings:
         Environment in which application is running
         """
         return self._config.get("environment", "development")
+
+    def get_jwt_secret(self) -> str | None:
+        """
+        Secret key for JWT token encoding/decoding
+        """
+        return self._jwt_secret_key
 
 
 settings = Settings()

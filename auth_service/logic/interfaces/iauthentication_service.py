@@ -18,7 +18,7 @@ class IAuthenticationService(ABC):
         """
 
     @abstractmethod
-    async def logout(self, user_id: str, strategy_name: str) -> dict:
+    async def logout(self, refresh_token: str, strategy_name: str) -> dict:
         """
-        Logout user with user_id
+        Logout user with token
         """
