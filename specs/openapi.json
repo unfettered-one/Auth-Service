@@ -410,10 +410,6 @@
             },
             "LogoutModel": {
                 "properties": {
-                    "access_token": {
-                        "type": "string",
-                        "title": "Access Token"
-                    },
                     "refresh_token": {
                         "type": "string",
                         "title": "Refresh Token"
@@ -422,7 +418,6 @@
                 "additionalProperties": false,
                 "type": "object",
                 "required": [
-                    "access_token",
                     "refresh_token"
                 ],
                 "title": "LogoutModel"

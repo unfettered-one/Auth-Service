@@ -20,7 +20,6 @@ class LoginResponse(BaseModelForbidExtra):
 
 
 class LogoutModel(BaseModelForbidExtra):
-    access_token: str
     refresh_token: str
 
 

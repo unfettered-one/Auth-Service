@@ -48,7 +48,7 @@ async def login(
             apps=user.apps,
         ),
         access_token=result["access_token"],
-        refresh_token=result["refresh_token"],
+        refresh_token=result["refresh_token"],  # TODO remove later and store in http cookie
     )
     return ORJSONResponse(
         status_code=201,
