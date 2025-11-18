@@ -282,15 +282,12 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Successful Response",
+                        "description": "Logout successful",
                         "content": {
                             "application/json": {
                                 "schema": {}
                             }
                         }
-                    },
-                    "204": {
-                        "description": "Logout successful"
                     },
                     "422": {
                         "description": "Validation Error",
