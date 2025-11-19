@@ -64,9 +64,7 @@ async def login(
     tags=["Authentication"],
 )
 @api_exception_handler
-async def logout(
-    logout_request: LogoutRequestModel = Body(...),
-):
+async def logout(logout_request: LogoutRequestModel = Body(...), token_data=Security(get_current_user)):
     """
     User logout endpoint
     """

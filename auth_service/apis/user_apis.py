@@ -4,7 +4,7 @@ Apis to register or handle users.
 
 from datetime import datetime, UTC
 
-from fastapi import APIRouter, Body
+from fastapi import APIRouter, Body, Security
 from fastapi.responses import JSONResponse, Response
 
 from errorhub.decorator import api_exception_handler
@@ -12,6 +12,7 @@ from errorhub.decorator import api_exception_handler
 from models.users import User, UserRequest
 from logic.factory import factory
 from utils.helper import generate_user_id
+from middleware.auth_dependency import get_current_user
 
 router = APIRouter()
 
@@ -46,7 +47,7 @@ async def register_user(
 
 @router.delete("/users/{user_id}", tags=["Users"], responses={})
 @api_exception_handler
-async def delete_user(user_id: str):
+async def delete_user(user_id: str, token_data=Security(get_current_user)):
     """
     Api to delete a user by user_id
     """
@@ -57,7 +58,7 @@ async def delete_user(user_id: str):
 
 @router.get("/users/{user_id}", tags=["Users"], responses={})
 @api_exception_handler
-async def get_user(user_id: str, email: str | None = None):
+async def get_user(user_id: str, email: str | None = None, token_data=Security(get_current_user)):
     """
     Api to get user information either by user_id or email
     """
@@ -68,7 +69,12 @@ async def get_user(user_id: str, email: str | None = None):
 
 @router.put("/users/{user_id}", tags=["Users"], responses={})
 @api_exception_handler
-async def update_user(user_id: str, payload: UserRequest = Body(..., embed=True), email: str | None = None):
+async def update_user(
+    user_id: str,
+    token_data=Security(get_current_user),
+    payload: UserRequest = Body(..., embed=True),
+    email: str | None = None,
+):
     """
     Api to update user or return proper exceptions for errors
     """
