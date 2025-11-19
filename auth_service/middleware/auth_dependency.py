@@ -12,7 +12,7 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 from logic.services.jwt_token_service import JWTTokenService
 from configuration import settings
-from errorhub.exceptions import UnauthorizedException
+from errorhub.exceptions import UnauthorizedException, BadRequestException
 from errorhub.models import ErrorSeverity
 
 # FastAPI bearer schema (adds correct OpenAPI security!)
@@ -53,11 +53,16 @@ async def get_current_user(
 
     # No Authorization header → not authenticated
     if credentials is None:
-        raise HTTPException(
-            status_code=401,
-            detail="Missing Authorization header",
+        raise BadRequestException(
+            service="Auth Service",
+            message="Authorization header missing",
+            severity=ErrorSeverity.LOW,
+            environment=settings.get_environment(),
+            context={
+                "detail": "No Authorization header provided in the request.",
+                "suggestion": "Please include a valid Authorization header with a Bearer token.",
+            },
         )
-
     # Extract the raw token from header
     token = credentials.credentials
 
