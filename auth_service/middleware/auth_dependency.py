@@ -1,4 +1,11 @@
-# TODO to be moved to a common package later so that all service can use it
+"""
+Reusable JWT Authentication Dependency
+-------------------------------------
+
+This module validates Access Tokens using JWTTokenService.
+It is intentionally independent of AuthenticationService and the Factory,
+so it can be moved into a shared/common package and reused by any service.
+"""
 
 from fastapi import HTTPException, Security
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
@@ -6,9 +13,10 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from logic.services.jwt_token_service import JWTTokenService
 from configuration import settings
 
+# FastAPI bearer schema (adds correct OpenAPI security!)
 bearer_scheme = HTTPBearer(auto_error=False)
 
-# Create a standalone token service instance (no factory)
+# Standalone TokenService instance (no factory)
 token_service = JWTTokenService(
     secret_key=settings.get_jwt_secret() or "default_secret_key",
     access_token_expiry_minutes=15,
@@ -16,21 +24,49 @@ token_service = JWTTokenService(
 )
 
 
-async def get_current_user(credentials: HTTPAuthorizationCredentials = Security(bearer_scheme)):
+async def get_current_user(
+    credentials: HTTPAuthorizationCredentials = Security(bearer_scheme),
+):
     """
-    Validates Access Token independently using JWTTokenService.
-    This file has ZERO dependency on AuthenticationService or Factory,
-    so it can be moved to a shared library later.
+    Extracts and validates the Access Token from the Authorization header.
+
+    This function:
+        ✓ Extracts Bearer token
+        ✓ Verifies the JWT signature
+        ✓ Checks expiry
+        ✓ Returns the decoded JWT payload on success
+        ✓ Raises HTTP 401 on failure
+
+    RETURN VALUE:
+        Payload dict from JWT, example:
+        {
+            "sub": "user_123",
+            "email": "yash@example.com",
+            "apps": ["todo"],
+            "iat": ...,
+            "exp": ...,
+            "type": "access"
+        }
     """
+
+    # No Authorization header → not authenticated
     if credentials is None:
-        raise HTTPException(status_code=401, detail="Missing Authorization header")
+        raise HTTPException(
+            status_code=401,
+            detail="Missing Authorization header",
+        )
 
-    token = credentials.credentials  # Already extracted by HTTPBearer
+    # Extract the raw token from header
+    token = credentials.credentials
 
-    # Verify JWT access token directly
+    # Validate JWT access token
     payload = await token_service.verify_access_token(token)
 
+    # Invalid / expired / wrong type
     if not payload:
-        raise HTTPException(status_code=401, detail="Invalid or expired access token")
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid or expired access token",
+        )
 
-    return payload  # <-- becomes current_user
+    return payload  # <-- returned as "current user"

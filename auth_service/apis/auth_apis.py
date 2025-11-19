@@ -2,7 +2,7 @@
 Authentication APIs
 """
 
-from fastapi import APIRouter, Body
+from fastapi import APIRouter, Body, Security
 from fastapi.responses import ORJSONResponse
 
 from errorhub.decorator import api_exception_handler
@@ -11,6 +11,7 @@ from models.auth import LoginRequestModel, LoginResponse, LogoutRequestModel, To
 from models.users import UserResponse
 
 from logic.factory import factory
+from middleware.auth_dependency import get_current_user
 
 router = APIRouter()
 
@@ -96,3 +97,26 @@ async def refresh_token(
     tokens = await auth_service.refresh(refresh_request.data.refresh_token)
     tokens_response = TokenRefreshResponse(**tokens)
     return ORJSONResponse(content=tokens_response.model_dump(), status_code=200)
+
+
+@router.get(
+    "/auth/me",
+    summary="Get current user info",
+    responses={200: {"description": "Current user info", "model": UserResponse}},
+    tags=["Authentication"],
+)
+@api_exception_handler
+async def get_current_user_info(
+    payload=Security(get_current_user),
+):
+    user_id = payload["sub"]
+
+    user_service = factory.get_user_service()
+    user = await user_service.get_user_info(user_id, None)
+
+    return UserResponse(
+        id=user.id,
+        name=user.name,
+        email=user.email,
+        apps=user.apps,
+    )
