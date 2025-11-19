@@ -12,6 +12,8 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 from logic.services.jwt_token_service import JWTTokenService
 from configuration import settings
+from errorhub.exceptions import UnauthorizedException
+from errorhub.models import ErrorSeverity
 
 # FastAPI bearer schema (adds correct OpenAPI security!)
 bearer_scheme = HTTPBearer(auto_error=False)
@@ -64,9 +66,15 @@ async def get_current_user(
 
     # Invalid / expired / wrong type
     if not payload:
-        raise HTTPException(
-            status_code=401,
-            detail="Invalid or expired access token",
+        raise UnauthorizedException(
+            service="Auth Service",
+            message="Invalid or expired access token",
+            severity=ErrorSeverity.LOW,
+            environment=settings.get_environment(),
+            context={
+                "detail": "The provided access token is invalid or has expired.",
+                "suggestion": "Please provide a valid access token.",
+            },
         )
 
     return payload  # <-- returned as "current user"
