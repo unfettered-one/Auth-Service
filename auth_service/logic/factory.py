@@ -2,12 +2,17 @@
 Factory module that is used everywhere to create instances of services
 """
 
-from logic.interfaces.iuser_respository import IUserRepository
 from logic.repository.user_repository import JsonUserRepository
-from logic.interfaces.ibase_strategy import IBaseStrategy
-from logic.startegies.password_startegy import BcryptPasswordStrategy
-
 from logic.services.user_service import UserService
+from logic.services.authentication_service import AuthenticationService
+
+from logic.interfaces.iauth_strategy import IAuthStrategy
+from logic.interfaces.iauthentication_service import IAuthenticationService
+from logic.services.jwt_token_service import JWTTokenService
+
+from logic.startegies.password_startegy import EmailPasswordStrategy
+from logic.startegies.google_strategy import GoogleAuthStrategy
+from configuration import settings
 
 
 class Factory:
@@ -16,27 +21,41 @@ class Factory:
     """
 
     @staticmethod
-    def get_user_repository() -> IUserRepository:
-        """
-        Returns an instance of the user repository
-        """
-        return JsonUserRepository()
-
-    @staticmethod
     def get_user_service() -> UserService:
         """
         Returns an instance of the user service
         """
         user_repo = JsonUserRepository()
-        base_strategy = BcryptPasswordStrategy()
-        return UserService(user_repo, base_strategy)
+        return UserService(user_repo)
 
     @staticmethod
-    def get_base_strategy() -> IBaseStrategy:
+    def get_authentication_service() -> IAuthenticationService:
         """
-        Returns an instance of the base strategy
+        Returns an instance of the authentication service
         """
-        return BcryptPasswordStrategy()
+
+        # Build user repository
+        user_repo = JsonUserRepository()
+
+        # Build strategies
+        strategies: dict[str, IAuthStrategy] = {
+            "email_password": EmailPasswordStrategy(user_repository=user_repo),
+            "google": GoogleAuthStrategy(user_repository=user_repo),
+        }
+
+        # Build token service
+        token_service = JWTTokenService(
+            secret_key=settings.get_jwt_secret() or "default_secret_key",
+            access_token_expiry_minutes=15,
+            refresh_token_expiry_days=7,
+        )
+
+        # Create fully-wired authentication service
+        return AuthenticationService(
+            strategies=strategies,
+            token_service=token_service,
+            user_repository=user_repo,
+        )
 
 
 factory = Factory()

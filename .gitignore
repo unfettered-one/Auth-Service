@@ -4,3 +4,4 @@ __pycache__/
 .venv/*
 auth_service/auth_service.egg-info/
 data/user_records.json
+temp.py

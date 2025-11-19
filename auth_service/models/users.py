@@ -1,8 +1,9 @@
-from pydantic import BaseModel, ConfigDict, Field, EmailStr
+from pydantic import Field, EmailStr
+from models.base import BaseModelForbidExtra
 from datetime import datetime, UTC
 
 
-class User(BaseModel):
+class User(BaseModelForbidExtra):
     id: str
     name: str | None = None
     email: EmailStr
@@ -10,12 +11,17 @@ class User(BaseModel):
     created_at: str = Field(default_factory=lambda: datetime.now(UTC).isoformat())
     updated_at: str = Field(default_factory=lambda: datetime.now(UTC).isoformat())
     apps: list[str] = []
-    model_config = ConfigDict(extra="forbid")
 
 
-class UserRequest(BaseModel):
+class UserRequest(BaseModelForbidExtra):
     name: str | None = None
     email: EmailStr
     password: str
     app_name: str
-    model_config = ConfigDict(extra="forbid")
+
+
+class UserResponse(BaseModelForbidExtra):
+    id: str
+    name: str | None = None
+    email: EmailStr
+    apps: list[str]

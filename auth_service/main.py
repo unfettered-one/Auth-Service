@@ -2,12 +2,13 @@
 Entry point for the Auth-Service API.
 """
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from errorhub.exceptions import ErrorHubException
 from apis.user_apis import router as user_router
+from apis.auth_apis import router as auth_router
 
 app = FastAPI(
     title="Auth-Service",
@@ -23,12 +24,15 @@ app.add_middleware(
 )
 
 app.include_router(user_router)
+app.include_router(auth_router)
 
 
 # Global Exception Handler
 @app.exception_handler(ErrorHubException)
-async def errorhub_exception_handler(exc: ErrorHubException):
+async def errorhub_exception_handler(request: Request, exc: ErrorHubException):
     """
     Catch all ErrorHubExceptions and return structured JSON response.
+    The FastAPI exception handler receives the request as the first
+    positional argument and the exception as the second.
     """
     return JSONResponse(status_code=exc.error_detail.code, content=exc.to_dict())

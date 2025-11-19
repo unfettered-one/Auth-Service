@@ -1,0 +1,673 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "Auth-Service",
+        "description": "API for Auth-Service",
+        "version": "0.1.0"
+    },
+    "servers": [
+        {
+            "url": "http://0.0.0.0:8000"
+        }
+    ],
+    "paths": {
+        "/users": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Register User",
+                "description": "Api to create user",
+                "operationId": "register_user_users_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Body_register_user_users_post"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{user_id}": {
+            "delete": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Delete User",
+                "description": "Api to delete a user by user_id",
+                "operationId": "delete_user_users__user_id__delete",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "User Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get User",
+                "description": "Api to get user information either by user_id or email",
+                "operationId": "get_user_users__user_id__get",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "User Id"
+                        }
+                    },
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "Email"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Update User",
+                "description": "Api to update user or return proper exceptions for errors",
+                "operationId": "update_user_users__user_id__put",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "User Id"
+                        }
+                    },
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "Email"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Body_update_user_users__user_id__put"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "User login",
+                "description": "User login endpoint",
+                "operationId": "login_auth_login_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginRequestModel"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "201": {
+                        "description": "Login successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LoginResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/logout": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "User logout",
+                "description": "User logout endpoint",
+                "operationId": "logout_auth_logout_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LogoutRequestModel"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Logout successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/refresh": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Refresh access token",
+                "description": "Refresh access token and refresh token",
+                "operationId": "refresh_token_auth_refresh_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TokenRequestModel"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Token refreshed successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TokenRefreshResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/me": {
+            "get": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Get current user info",
+                "operationId": "get_current_user_info_auth_me_get",
+                "responses": {
+                    "200": {
+                        "description": "Current user info",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Body_register_user_users_post": {
+                "properties": {
+                    "payload": {
+                        "$ref": "#/components/schemas/UserRequest"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "payload"
+                ],
+                "title": "Body_register_user_users_post"
+            },
+            "Body_update_user_users__user_id__put": {
+                "properties": {
+                    "payload": {
+                        "$ref": "#/components/schemas/UserRequest"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "payload"
+                ],
+                "title": "Body_update_user_users__user_id__put"
+            },
+            "HTTPValidationError": {
+                "properties": {
+                    "detail": {
+                        "items": {
+                            "$ref": "#/components/schemas/ValidationError"
+                        },
+                        "type": "array",
+                        "title": "Detail"
+                    }
+                },
+                "type": "object",
+                "title": "HTTPValidationError"
+            },
+            "LoginModel": {
+                "properties": {
+                    "strategy": {
+                        "type": "string",
+                        "title": "Strategy"
+                    },
+                    "credentials": {
+                        "additionalProperties": true,
+                        "type": "object",
+                        "title": "Credentials"
+                    }
+                },
+                "additionalProperties": false,
+                "type": "object",
+                "required": [
+                    "strategy",
+                    "credentials"
+                ],
+                "title": "LoginModel"
+            },
+            "LoginRequestModel": {
+                "properties": {
+                    "data": {
+                        "$ref": "#/components/schemas/LoginModel"
+                    }
+                },
+                "additionalProperties": false,
+                "type": "object",
+                "required": [
+                    "data"
+                ],
+                "title": "LoginRequestModel"
+            },
+            "LoginResponse": {
+                "properties": {
+                    "user": {
+                        "$ref": "#/components/schemas/UserResponse"
+                    },
+                    "access_token": {
+                        "type": "string",
+                        "title": "Access Token"
+                    },
+                    "refresh_token": {
+                        "type": "string",
+                        "title": "Refresh Token"
+                    },
+                    "token_type": {
+                        "type": "string",
+                        "title": "Token Type",
+                        "default": "bearer"
+                    },
+                    "expires_in": {
+                        "type": "integer",
+                        "title": "Expires In",
+                        "default": 900
+                    }
+                },
+                "additionalProperties": false,
+                "type": "object",
+                "required": [
+                    "user",
+                    "access_token",
+                    "refresh_token"
+                ],
+                "title": "LoginResponse"
+            },
+            "LogoutModel": {
+                "properties": {
+                    "refresh_token": {
+                        "type": "string",
+                        "title": "Refresh Token"
+                    }
+                },
+                "additionalProperties": false,
+                "type": "object",
+                "required": [
+                    "refresh_token"
+                ],
+                "title": "LogoutModel"
+            },
+            "LogoutRequestModel": {
+                "properties": {
+                    "data": {
+                        "$ref": "#/components/schemas/LogoutModel"
+                    }
+                },
+                "additionalProperties": false,
+                "type": "object",
+                "required": [
+                    "data"
+                ],
+                "title": "LogoutRequestModel"
+            },
+            "TokenModel": {
+                "properties": {
+                    "access_token": {
+                        "type": "string",
+                        "title": "Access Token"
+                    },
+                    "refresh_token": {
+                        "type": "string",
+                        "title": "Refresh Token"
+                    }
+                },
+                "additionalProperties": false,
+                "type": "object",
+                "required": [
+                    "access_token",
+                    "refresh_token"
+                ],
+                "title": "TokenModel"
+            },
+            "TokenRefreshResponse": {
+                "properties": {
+                    "access_token": {
+                        "type": "string",
+                        "title": "Access Token"
+                    },
+                    "refresh_token": {
+                        "type": "string",
+                        "title": "Refresh Token"
+                    }
+                },
+                "additionalProperties": false,
+                "type": "object",
+                "required": [
+                    "access_token",
+                    "refresh_token"
+                ],
+                "title": "TokenRefreshResponse"
+            },
+            "TokenRequestModel": {
+                "properties": {
+                    "data": {
+                        "$ref": "#/components/schemas/TokenModel"
+                    }
+                },
+                "additionalProperties": false,
+                "type": "object",
+                "required": [
+                    "data"
+                ],
+                "title": "TokenRequestModel"
+            },
+            "UserRequest": {
+                "properties": {
+                    "name": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Name"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "title": "Email"
+                    },
+                    "password": {
+                        "type": "string",
+                        "title": "Password"
+                    },
+                    "app_name": {
+                        "type": "string",
+                        "title": "App Name"
+                    }
+                },
+                "additionalProperties": false,
+                "type": "object",
+                "required": [
+                    "email",
+                    "password",
+                    "app_name"
+                ],
+                "title": "UserRequest"
+            },
+            "UserResponse": {
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "title": "Id"
+                    },
+                    "name": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Name"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "title": "Email"
+                    },
+                    "apps": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array",
+                        "title": "Apps"
+                    }
+                },
+                "additionalProperties": false,
+                "type": "object",
+                "required": [
+                    "id",
+                    "email",
+                    "apps"
+                ],
+                "title": "UserResponse"
+            },
+            "ValidationError": {
+                "properties": {
+                    "loc": {
+                        "items": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "integer"
+                                }
+                            ]
+                        },
+                        "type": "array",
+                        "title": "Location"
+                    },
+                    "msg": {
+                        "type": "string",
+                        "title": "Message"
+                    },
+                    "type": {
+                        "type": "string",
+                        "title": "Error Type"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "loc",
+                    "msg",
+                    "type"
+                ],
+                "title": "ValidationError"
+            }
+        },
+        "securitySchemes": {
+            "HTTPBearer": {
+                "type": "http",
+                "scheme": "bearer"
+            }
+        }
+    }
+}

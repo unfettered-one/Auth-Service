@@ -3,7 +3,6 @@ Abstract/Interface for Authentication Service
 """
 
 from abc import ABC, abstractmethod
-from models.users import User
 
 
 class IAuthenticationService(ABC):
@@ -12,25 +11,19 @@ class IAuthenticationService(ABC):
     """
 
     @abstractmethod
-    async def login(self, email: str, password: str) -> dict | User:
+    async def login(self, credentials: dict, strategy_name: str) -> dict:
         """
-        Login user with email and password
-        """
-
-    @abstractmethod
-    async def logout(self, user_id: str) -> dict:
-        """
-        Logout user with user_id
+        Login with different strategies, eg (email and password),google, microsoft
         """
 
     @abstractmethod
-    async def verify_token(self, token: str) -> dict | User:
+    async def logout(self, refresh_token: str) -> dict:
         """
-        Verify user token
+        Logout user with token
         """
 
     @abstractmethod
-    async def refresh_token(self, refresh_token: str) -> dict:
+    async def refresh(self, refresh_token: str) -> dict:
         """
-        Refresh user token
+        Refresh access and refresh tokens using the provided refresh token.
         """
