@@ -25,3 +25,17 @@ class LogoutModel(BaseModelForbidExtra):
 
 class LogoutRequestModel(BaseModelForbidExtra):
     data: LogoutModel
+
+
+class TokenModel(BaseModelForbidExtra):
+    access_token: str
+    refresh_token: str
+
+
+class TokenRequestModel(BaseModelForbidExtra):
+    data: TokenModel
+
+
+class TokenRefreshResponse(BaseModelForbidExtra):
+    access_token: str
+    refresh_token: str

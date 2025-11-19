@@ -7,7 +7,7 @@ from fastapi.responses import ORJSONResponse
 
 from errorhub.decorator import api_exception_handler
 
-from models.auth import LoginRequestModel, LoginResponse, LogoutRequestModel
+from models.auth import LoginRequestModel, LoginResponse, LogoutRequestModel, TokenRequestModel, TokenRefreshResponse
 from models.users import UserResponse
 
 from logic.factory import factory
@@ -76,3 +76,23 @@ async def logout(
     )
 
     return {"message": "User logged out successfully"}
+
+
+@router.post(
+    "/auth/refresh",
+    summary="Refresh access token",
+    responses={200: {"description": "Token refreshed successfully", "model": TokenRefreshResponse}},
+    tags=["Authentication"],
+)
+@api_exception_handler
+async def refresh_token(
+    refresh_request: TokenRequestModel = Body(...),
+):
+    """
+    Refresh access token and refresh token
+    """
+
+    auth_service = factory.get_authentication_service()
+    tokens = await auth_service.refresh(refresh_request.data.refresh_token)
+    tokens_response = TokenRefreshResponse(**tokens)
+    return ORJSONResponse(content=tokens_response.model_dump(), status_code=200)

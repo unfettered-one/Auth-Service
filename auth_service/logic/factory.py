@@ -54,6 +54,7 @@ class Factory:
         return AuthenticationService(
             strategies=strategies,
             token_service=token_service,
+            user_repository=user_repo,
         )
 
 

@@ -21,3 +21,9 @@ class IAuthenticationService(ABC):
         """
         Logout user with token
         """
+
+    @abstractmethod
+    async def refresh(self, refresh_token: str) -> dict:
+        """
+        Refresh access and refresh tokens using the provided refresh token.
+        """
