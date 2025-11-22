@@ -38,3 +38,5 @@ variable "lock_bucket" {
   type        = string
   description = "name of the state lock s3 bucket"
 }
+
+
