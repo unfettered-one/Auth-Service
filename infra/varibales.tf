@@ -25,7 +25,6 @@ variable "dynamodb_table_name" {
 }
 
 variable "environment_variables" {
-  type        = {}
   description = "Envrionmet variables for lambda"
 }
 
