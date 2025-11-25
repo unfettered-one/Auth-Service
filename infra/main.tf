@@ -1,5 +1,5 @@
 module "auth_service" {
-  source = "github.com/unfettered-one/Infra//core?ref=feat/pipeline"#TODO: change ref to tag after testing
+  source = "github.com/unfettered-one/Infra//core?ref=fix/terraform-core"#TODO: change ref to tag after testing
 
   service_name = "auth-service"
   stage        = var.stage
