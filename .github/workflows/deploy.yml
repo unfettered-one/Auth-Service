@@ -1,0 +1,17 @@
+name: "Deploy Auth Service"
+
+on:
+  push:
+    branches:
+      - "*"
+
+jobs:
+  deploy:
+    permissions:
+      id-token: write     # REQUIRED for OIDC
+      contents: read
+    uses: unfettered-one/Infra/.github/workflows/main.yml@991d83817978b3bf12b72ba2754f34f2ec565b15
+    with:
+      role_arn: "arn:aws:iam::815817733987:role/terraform-deploy-role-dev"
+      aws_region: "ap-south-1"
+      working_directory: "infra"

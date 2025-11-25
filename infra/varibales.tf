@@ -25,7 +25,6 @@ variable "dynamodb_table_name" {
 }
 
 variable "environment_variables" {
-  type        = {}
   description = "Envrionmet variables for lambda"
 }
 
@@ -38,3 +37,5 @@ variable "lock_bucket" {
   type        = string
   description = "name of the state lock s3 bucket"
 }
+
+
