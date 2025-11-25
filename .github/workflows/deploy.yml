@@ -7,6 +7,9 @@ on:
 
 jobs:
   deploy:
+    permissions:
+      id-token: write     # REQUIRED for OIDC
+      contents: read
     uses: unfettered-one/Infra/.github/workflows/main.yml@b1bd20a8742cf25a10d5879540228db4afb93976
     with:
       role_arn: "arn:aws:iam::815817733987:role/terraform-deploy-role-dev"
