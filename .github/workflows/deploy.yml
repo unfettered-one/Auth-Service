@@ -12,7 +12,7 @@ jobs:
       id-token: write
       contents: read
       packages: write
-    uses: unfettered-one/Infra/.github/workflows/main.yml@00b93c99cf91f12a724dd0017bf8b0d301fbf4c6
+    uses: unfettered-one/Infra/.github/workflows/main.yml@1a34568f245435c2cf82e156f5d8d3aa15ad7a5b
     with:
       role_arn: "arn:aws:iam::815817733987:role/terraform-deploy-role-dev"
       aws_region: "ap-south-1"
