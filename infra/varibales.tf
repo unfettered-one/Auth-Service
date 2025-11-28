@@ -38,4 +38,8 @@ variable "lock_bucket" {
   description = "name of the state lock s3 bucket"
 }
 
-
+variable "lambda_image_uri" {
+  description = "Docker image URI for Lambda function"
+  type        = string
+  default     = ""
+}
