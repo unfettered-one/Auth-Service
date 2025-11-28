@@ -17,6 +17,6 @@ jobs:
       aws_region: "ap-south-1"
       working_directory: "infra"
       lambda_code_path: "../../auth_service"
-      build-image: true
+      build_image: true
       lambda_handler: "app.handler"
     secrets: inherit
