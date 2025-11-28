@@ -10,8 +10,12 @@ jobs:
     permissions:
       id-token: write     # REQUIRED for OIDC
       contents: read
-    uses: unfettered-one/Infra/.github/workflows/main.yml@8d51550fb29c3b117e3a5a5b27dfad6830152df2
+    uses: unfettered-one/Infra/.github/workflows/main.yml@114664671e32c02b11d78ae3bb2e854519336887
     with:
       role_arn: "arn:aws:iam::815817733987:role/terraform-deploy-role-dev"
       aws_region: "ap-south-1"
       working_directory: "infra"
+      build_image: true
+      lambda_code_path: "/workspaces/Auth-Service/auth_service"
+      lambda_handler: "auth_service.main.app"
+      
