@@ -3,7 +3,8 @@ name: "Deploy Auth Service"
 on:
   push:
     branches:
-      - "**"
+      # - "**"
+      - "main"
 
 jobs:
   deploy:
