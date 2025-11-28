@@ -12,7 +12,7 @@ jobs:
       id-token: write
       contents: read
       packages: write
-    uses: unfettered-one/Infra/.github/workflows/main.yml@bf8bc42632b01248c8d123bf0a77dab9bedb6e1a
+    uses: unfettered-one/Infra/.github/workflows/main.yml@7a5c2ce1908c8b7fdfef5839ca5e59ae5fe1b1df
     with:
       role_arn: "arn:aws:iam::815817733987:role/terraform-deploy-role-dev"
       aws_region: "ap-south-1"
@@ -21,4 +21,6 @@ jobs:
       build_image: true
       lambda_handler: "app.handler"
       branch_name: "fix/terraform-core" #TODO remove after testing
+      service_name: "auth-service"
+      stage: dev
     secrets: inherit
