@@ -10,7 +10,7 @@ jobs:
     permissions:
       id-token: write     # REQUIRED for OIDC
       contents: read
-    uses: unfettered-one/Infra/.github/workflows/main.yml@991d83817978b3bf12b72ba2754f34f2ec565b15
+    uses: unfettered-one/Infra/.github/workflows/main.yml@8d51550fb29c3b117e3a5a5b27dfad6830152df2
     with:
       role_arn: "arn:aws:iam::815817733987:role/terraform-deploy-role-dev"
       aws_region: "ap-south-1"
