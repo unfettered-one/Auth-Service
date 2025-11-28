@@ -10,6 +10,7 @@ jobs:
     permissions:
       id-token: write
       contents: read
+      packages: write
     uses: unfettered-one/Infra/.github/workflows/main.yml@114664671e32c02b11d78ae3bb2e854519336887
     with:
       role_arn: "arn:aws:iam::815817733987:role/terraform-deploy-role-dev"
@@ -18,3 +19,4 @@ jobs:
       lambda_code_path: "../../auth_service"
       build-image: true
       lambda_handler: "app.handler"
+    secrets: inherit
