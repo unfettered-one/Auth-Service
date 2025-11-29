@@ -12,8 +12,8 @@ module "auth_service" {
   lambda_image_uri = var.lambda_image_uri # ← Use the variable here
   lambda_handler   = "app.handler"
 
-  lambda_execution_policy_arn = var.lambda_execution_policy_arn
-  environment_variables       = var.environment_variables
+  lambda_execution_policy_arn = aws_iam_policy.lambda_dynamodb_policy.arn
+  environment_variables       = {}
 
   create_http_api = false
   enable_dynamodb = false
