@@ -9,7 +9,7 @@ module "auth_service" {
   use_zip       = false
   use_ecr       = false
 
-  lambda_image_uri = var.lambda_image_uri # ← Use the variable here
+  lambda_image_uri = var.lambda_image_uri
   lambda_handler   = "app.handler"
 
   lambda_execution_policy_arn = aws_iam_policy.lambda_dynamodb_policy.arn
