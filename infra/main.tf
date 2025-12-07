@@ -1,5 +1,5 @@
 module "auth_service" {
-  source = "github.com/unfettered-one/Infra//core?ref=fix/terraform-core"
+  source = "github.com/unfettered-one/Infra//core?ref=main"
 
   service_name = "auth-service"
   stage        = var.stage
