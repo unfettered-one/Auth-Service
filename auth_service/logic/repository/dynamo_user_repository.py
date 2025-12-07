@@ -29,7 +29,6 @@ class DynamoDBUserRepository(IUserRepository):
         """
         item = user.model_dump()
         item["pk"] = f"USER#{user.id}"
-        item["sk"] = "PROFILE"
 
         self.users_table.create_item(item)
         return user
@@ -55,7 +54,7 @@ class DynamoDBUserRepository(IUserRepository):
         pk = items[0]["pk"]["S"]  # Assuming pk is projected in the GSI
 
         # Now get the full item from the main table
-        full_item = self.users_table.get_item({"pk": pk, "sk": "PROFILE"})
+        full_item = self.users_table.get_item({"pk": pk})
 
         if full_item:
             return User(**full_item)
@@ -65,7 +64,7 @@ class DynamoDBUserRepository(IUserRepository):
         """
         find user by id
         """
-        item = self.users_table.get_item({"pk": f"USER#{user_id}", "sk": "PROFILE"})
+        item = self.users_table.get_item({"pk": f"USER#{user_id}"})
 
         if item:
             return User(**item)
@@ -75,7 +74,7 @@ class DynamoDBUserRepository(IUserRepository):
         """
         update user in DynamoDB
         """
-        key = {"pk": f"USER#{user.id}", "sk": "PROFILE"}
+        key = {"pk": f"USER#{user.id}"}
 
         update_expression = "SET email = :email"
 
@@ -87,4 +86,4 @@ class DynamoDBUserRepository(IUserRepository):
         """
         delete user from DynamoDB
         """
-        self.users_table.delete_item({"pk": f"USER#{user_id}", "sk": "PROFILE"})
+        self.users_table.delete_item({"pk": f"USER#{user_id}"})

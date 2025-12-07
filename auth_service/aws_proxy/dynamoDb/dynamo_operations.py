@@ -41,47 +41,58 @@ class DynamoDBOperations:
     def delete_item(self, key: Dict[str, Any]) -> None:
         self.client.delete_item(TableName=self.table_name, Key=self._serialize(key))
 
+    def _serialize_value(self, value: Any) -> Dict[str, Any]:
+        if isinstance(value, str):
+            return {"S": value}
+
+        elif isinstance(value, bool):
+            return {"BOOL": value}
+
+        elif isinstance(value, int) or isinstance(value, float):
+            return {"N": str(value)}
+
+        elif value is None:
+            return {"NULL": True}
+
+        elif isinstance(value, list):
+            return {"L": [self._serialize_value(v) for v in value]}
+
+        elif isinstance(value, dict):
+            return {"M": {k: self._serialize_value(v) for k, v in value.items()}}
+
+        else:
+            raise ValueError(f"Unsupported type: {type(value)}")
+
     def _serialize(self, data: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
-        """
-        Converts normal Python dict → DynamoDB format.
-        """
-        dynamodb_item = {}
+        return {k: self._serialize_value(v) for k, v in data.items()}
 
-        for k, v in data.items():
-            if isinstance(v, str):
-                dynamodb_item[k] = {"S": v}
-            elif isinstance(v, bool):
-                dynamodb_item[k] = {"BOOL": v}
-            elif isinstance(v, int):
-                dynamodb_item[k] = {"N": str(v)}
-            elif isinstance(v, float):
-                dynamodb_item[k] = {"N": str(v)}
-            elif v is None:
-                dynamodb_item[k] = {"NULL": True}
-            else:
-                raise ValueError(f"Unsupported type for {k}: {type(v)}")
+    def _deserialize_value(self, value: Dict[str, Any]) -> Any:
+        dtype = next(iter(value))
+        raw = value[dtype]
 
-        return dynamodb_item
+        if dtype == "S":
+            return raw
 
-    def _deserialize(self, item: Optional[Dict[str, Dict[str, Any]]]):
+        elif dtype == "N":
+            return int(raw) if raw.isdigit() else float(raw)
+
+        elif dtype == "BOOL":
+            return raw
+
+        elif dtype == "NULL":
+            return None
+
+        elif dtype == "L":
+            return [self._deserialize_value(v) for v in raw]
+
+        elif dtype == "M":
+            return {k: self._deserialize_value(v) for k, v in raw.items()}
+
+        else:
+            return raw
+
+    def _deserialize(self, item: Dict[str, Dict[str, Any]] | None):
         if not item:
             return None
 
-        python_item = {}
-
-        for k, v in item.items():
-            dtype = list(v.keys())[0]
-            value = v[dtype]
-
-            if dtype == "S":
-                python_item[k] = value
-            elif dtype == "N":
-                python_item[k] = int(value) if value.isdigit() else float(value)
-            elif dtype == "BOOL":
-                python_item[k] = value
-            elif dtype == "NULL":
-                python_item[k] = None
-            else:
-                python_item[k] = value
-
-        return python_item
+        return {k: self._deserialize_value(v) for k, v in item.items()}
