@@ -35,11 +35,19 @@ def test_lambda():
         "isBase64Encoded": False,
     }
 
-    # Mock context (minimal)
-    mock_context = {}
+    # Mock Lambda context
+    mock_context = {
+        "function_name": "test-function",
+        "function_version": "$LATEST",
+        "invoked_function_arn": "arn:aws:lambda:us-east-1:123456789012:function:test-function",
+        "memory_limit_in_mb": 128,
+        "aws_request_id": "12345678-1234-1234-1234-123456789012",
+        "log_group_name": "/aws/lambda/test-function",
+        "log_stream_name": "2023/01/01/[$LATEST]abcd1234",
+    }
 
     # Call the Mangum handler
-    response = mangum_handler(mock_event, mock_context)
+    response = mangum_handler(event=mock_event, context=mock_context)  # type: ignore
 
     # Print the response
     print("Lambda Response:")
