@@ -10,6 +10,8 @@ from errorhub.exceptions import ErrorHubException
 from apis.user_apis import router as user_router
 from apis.auth_apis import router as auth_router
 
+from mangum import Mangum
+
 app = FastAPI(
     title="Auth-Service",
     description="API for Auth-Service",
@@ -25,6 +27,8 @@ app.add_middleware(
 
 app.include_router(user_router)
 app.include_router(auth_router)
+
+mangum_handler = Mangum(app)
 
 
 # Global Exception Handler
