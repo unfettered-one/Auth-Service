@@ -6,6 +6,9 @@ from logic.interfaces.iuser_respository import IUserRepository
 from models.users import User
 from auth_service.aws_proxy.utils import get_dynamodb_operations
 
+from auth_service.configuration import settings
+from errorhub.exceptions import NotFoundException
+
 
 class DynamoDBUserRepository(IUserRepository):
     """
@@ -14,7 +17,11 @@ class DynamoDBUserRepository(IUserRepository):
     """
 
     def __init__(self):
-        self.users_table = get_dynamodb_operations("users", "us-east-1")
+        self._region = settings.get_aws_region()
+        self._table_name = settings.get_user_dynamo_table_name()
+        if self._table_name is None:
+            raise NotFoundException(service="AuthService", message="DynamoDB table name for users is not configured.")
+        self.users_table = get_dynamodb_operations(self._table_name, self._region)
 
     async def create_user(self, user: User) -> User:
         """
