@@ -3,7 +3,7 @@ Strategy for Google authentication.
 """
 
 from logic.interfaces.iauth_strategy import IAuthStrategy
-from logic.repository.user_repository import IUserRepository
+from logic.repository.json_user_repository import IUserRepository
 from models.users import User
 
 from google.oauth2 import id_token

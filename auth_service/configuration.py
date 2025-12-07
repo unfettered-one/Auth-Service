@@ -49,6 +49,12 @@ class Settings:
         """
         return self._config.get("userJsonRecord", "No path found")
 
+    def get_user_dynamo_table_name(self) -> str | None:
+        """
+        DynamoDB table name for user records
+        """
+        return self._config.get("userDynamoTable")
+
     def get_environment(self) -> str:
         """
         Environment in which application is running
@@ -60,6 +66,12 @@ class Settings:
         Secret key for JWT token encoding/decoding
         """
         return self._jwt_secret_key
+
+    def get_aws_region(self) -> str:
+        """
+        AWS region for DynamoDB operations
+        """
+        return self._config.get("awsRegion", "ap-south-1")
 
 
 settings = Settings()

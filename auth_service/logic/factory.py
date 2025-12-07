@@ -2,7 +2,7 @@
 Factory module that is used everywhere to create instances of services
 """
 
-from logic.repository.user_repository import JsonUserRepository
+from logic.repository.json_user_repository import JsonUserRepository
 from logic.services.user_service import UserService
 from logic.services.authentication_service import AuthenticationService
 
