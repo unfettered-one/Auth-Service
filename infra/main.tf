@@ -15,6 +15,7 @@ module "auth_service" {
   lambda_execution_policy_arn = aws_iam_policy.lambda_dynamodb_policy.arn
   environment_variables       = {}
 
-  create_http_api = false
-  enable_dynamodb = false
+  create_http_api     = false
+  enable_dynamodb     = true
+  dynamodb_table_name = "auth-service-user-records-${var.stage}"
 }

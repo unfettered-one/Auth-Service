@@ -10,9 +10,6 @@ resource "aws_iam_policy" "lambda_dynamodb_policy" {
         Effect = "Allow"
         Action = [
           "dynamodb:*Item",
-          "dynamodb:PutItem",
-          "dynamodb:UpdateItem",
-          "dynamodb:DeleteItem"
         ]
         Resource = "arn:aws:dynamodb:${var.region}:*:table/${var.service_name}-*"
       },
