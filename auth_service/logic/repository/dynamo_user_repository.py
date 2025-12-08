@@ -2,12 +2,15 @@
 Connection between DynamoDB users table and user service layer
 """
 
+from typing import Type
+
 from logic.interfaces.iuser_respository import IUserRepository
 from models.users import User
 from auth_service.aws_proxy.utils import get_dynamodb_operations
 
 from auth_service.configuration import settings
 from errorhub.exceptions import NotFoundException
+from errorhub.models import BaseModel
 
 
 class DynamoDBUserRepository(IUserRepository):
@@ -57,8 +60,16 @@ class DynamoDBUserRepository(IUserRepository):
         full_item = self.users_table.get_item({"pk": pk})
 
         if full_item:
-            return User(**full_item)
+            return User(**await self._filter_for_user_model(User, full_item))
         return None
+
+    async def _filter_for_user_model(self, model: Type[BaseModel], data: dict) -> dict:
+        """
+        filter data for user model
+        """
+
+        allowed_fields = set(model.model_fields.keys())
+        return {k: v for k, v in data.items() if k in allowed_fields}
 
     async def get_user_by_id(self, user_id: str):
         """
@@ -67,7 +78,7 @@ class DynamoDBUserRepository(IUserRepository):
         item = self.users_table.get_item({"pk": f"USER#{user_id}"})
 
         if item:
-            return User(**item)
+            return User(**await self._filter_for_user_model(User, item))
         return None
 
     async def update_user(self, user: User):
