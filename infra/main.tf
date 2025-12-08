@@ -18,4 +18,6 @@ module "auth_service" {
   create_http_api     = false
   enable_dynamodb     = true
   dynamodb_table_name = "auth-service-user-records-${var.stage}"
+  gsi                 = "email-index"
+  new_attribute       = "email"
 }
