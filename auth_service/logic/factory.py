@@ -2,7 +2,8 @@
 Factory module that is used everywhere to create instances of services
 """
 
-from logic.repository.user_repository import JsonUserRepository
+from logic.repository.json_user_repository import JsonUserRepository
+from logic.repository.dynamo_user_repository import DynamoDBUserRepository
 from logic.services.user_service import UserService
 from logic.services.authentication_service import AuthenticationService
 
@@ -25,7 +26,8 @@ class Factory:
         """
         Returns an instance of the user service
         """
-        user_repo = JsonUserRepository()
+        # user_repo = JsonUserRepository()
+        user_repo = DynamoDBUserRepository()
         return UserService(user_repo)
 
     @staticmethod
@@ -35,7 +37,8 @@ class Factory:
         """
 
         # Build user repository
-        user_repo = JsonUserRepository()
+        # user_repo = JsonUserRepository()
+        user_repo = DynamoDBUserRepository()
 
         # Build strategies
         strategies: dict[str, IAuthStrategy] = {

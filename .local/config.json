@@ -1,3 +1,5 @@
 {
-    "userJsonRecord": "data/user_records.json"
+    "userJsonRecord": "data/user_records.json",
+    "userDynamoTable": "auth-service-user-records-dev",
+    "awsRegion": "ap-south-1"
 }
