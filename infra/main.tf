@@ -1,5 +1,5 @@
 module "auth_service" {
-  source = "github.com/unfettered-one/Infra//core?ref=main"
+  source = "github.com/unfettered-one/Infra//core?ref=feat/lambda-url"
 
   service_name = "auth-service"
   stage        = var.stage

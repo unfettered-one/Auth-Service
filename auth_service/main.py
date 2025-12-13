@@ -40,3 +40,4 @@ async def errorhub_exception_handler(request: Request, exc: ErrorHubException):
     positional argument and the exception as the second.
     """
     return JSONResponse(status_code=exc.error_detail.code, content=exc.to_dict())
+
