@@ -13,7 +13,11 @@ module "auth_service" {
   lambda_handler   = "auth_service.main.mangum_handler"
 
   lambda_execution_policy_arn = aws_iam_policy.lambda_dynamodb_policy.arn
-  environment_variables       = {}
+  environment_variables = {
+    USER_JSON_RECORD  = "data/user_records.json"
+    USER_DYNAMO_TABLE = "${var.service_name}-user-records-${var.stage}"
+    ENVIRONMENT       = var.stage
+  }
 
   create_http_api     = false
   enable_dynamodb     = true

@@ -30,3 +30,10 @@ variable "lambda_image_uri" {
   type        = string
   default     = ""
 }
+
+variable "environment_variables" {
+  type        = map(string)
+  description = "Environment variables for the Lambda function"
+  default     = {}
+}
+

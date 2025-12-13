@@ -21,7 +21,9 @@ class Settings:
 
     def __init__(self) -> None:
         self._config = {}
-        self.load_env_variable()
+        self._config["userJsonRecord"] = os.getenv("USER_JSON_RECORD", "data/user_records.json")
+        self._config["userDynamoTable"] = os.getenv("USER_DYNAMO_TABLE", None)
+        self._config["environment"] = os.getenv("ENVIRONMENT", "development")
         self._jwt_secret_key = os.getenv("JWT_SECRET_KEY", None)
 
     def load_env_variable(self):
@@ -71,7 +73,7 @@ class Settings:
         """
         AWS region for DynamoDB operations
         """
-        return self._config.get("awsRegion", "ap-south-1")
+        return self._config.get("AWS_REGION", "ap-south-1")
 
 
 settings = Settings()

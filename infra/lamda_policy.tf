@@ -31,4 +31,3 @@ resource "aws_iam_policy" "lambda_dynamodb_policy" {
     Service     = var.service_name
   }
 }
-
