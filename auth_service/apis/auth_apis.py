@@ -17,7 +17,7 @@ from auth_service.models.auth import (
 from auth_service.models.users import UserResponse
 
 from auth_service.logic.factory import factory
-from middleware.auth_dependency import get_current_user
+from auth_service.middleware.auth_dependency import get_current_user
 
 router = APIRouter()
 
