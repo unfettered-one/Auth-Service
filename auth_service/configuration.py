@@ -34,7 +34,7 @@ class Settings:
                 self._config["environment"] = EnvironmentEnum.DEVELOPMENT
         else:
             self._config["environment"] = EnvironmentEnum.DEVELOPMENT
-        self._config["environment"] = temp_env
+
 
     def load_env_variable(self):
         """
@@ -71,7 +71,7 @@ class Settings:
         """
         Environment in which application is running
         """
-        return self._config.get("environment", "development")
+        return self._config["environment"]
 
     def get_jwt_secret(self) -> str | None:
         """

@@ -12,15 +12,25 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 from auth_service.logic.services.jwt_token_service import JWTTokenService
 from auth_service.configuration import settings
-from errorhub.exceptions import UnauthorizedException, BadRequestException
+from errorhub.exceptions import UnauthorizedException, BadRequestException, InternalServerErrorException
 from errorhub.models import ErrorSeverity
 
 # FastAPI bearer schema (adds correct OpenAPI security!)
 bearer_scheme = HTTPBearer(auto_error=False)
-
+secret_key = settings.get_jwt_secret()
+if secret_key is None:
+    raise InternalServerErrorException(
+        service="Auth Service",
+        message="JWT secret is not configured",
+        severity="HIGH",
+        environment=settings.get_environment(),
+        context={
+            "detail": "The JWT secret key is missing in the configuration.",
+        },
+    )
 # Standalone TokenService instance (no factory)
 token_service = JWTTokenService(
-    secret_key=settings.get_jwt_secret() or "default_secret_key",
+    secret_key=secret_key,
     access_token_expiry_minutes=15,
     refresh_token_expiry_days=7,
 )
