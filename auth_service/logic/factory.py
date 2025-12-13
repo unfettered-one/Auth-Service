@@ -15,6 +15,8 @@ from auth_service.logic.startegies.password_startegy import EmailPasswordStrateg
 from auth_service.logic.startegies.google_strategy import GoogleAuthStrategy
 from auth_service.configuration import settings
 
+from errorhub.exceptions import InternalServerErrorException
+
 
 class Factory:
     """
@@ -47,6 +49,16 @@ class Factory:
         }
 
         # Build token service
+        if settings.get_jwt_secret() is None:
+            raise InternalServerErrorException(
+                service="Auth Service",
+                message="JWT secret is not configured",
+                severity="HIGH",
+                environment=settings.get_environment(),
+                context={
+                    "detail": "The JWT secret key is missing in the configuration.",
+                },
+            )
         token_service = JWTTokenService(
             secret_key=settings.get_jwt_secret() or "default_secret_key",
             access_token_expiry_minutes=15,
