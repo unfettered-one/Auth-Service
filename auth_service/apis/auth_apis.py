@@ -7,10 +7,16 @@ from fastapi.responses import ORJSONResponse
 
 from errorhub.decorator import api_exception_handler
 
-from models.auth import LoginRequestModel, LoginResponse, LogoutRequestModel, TokenRequestModel, TokenRefreshResponse
-from models.users import UserResponse
+from auth_service.models.auth import (
+    LoginRequestModel,
+    LoginResponse,
+    LogoutRequestModel,
+    TokenRequestModel,
+    TokenRefreshResponse,
+)
+from auth_service.models.users import UserResponse
 
-from logic.factory import factory
+from auth_service.logic.factory import factory
 from middleware.auth_dependency import get_current_user
 
 router = APIRouter()

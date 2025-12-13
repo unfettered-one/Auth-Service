@@ -10,7 +10,7 @@ so it can be moved into a shared/common package and reused by any service.
 from fastapi import HTTPException, Security
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
-from logic.services.jwt_token_service import JWTTokenService
+from auth_service.logic.services.jwt_token_service import JWTTokenService
 from auth_service.configuration import settings
 from errorhub.exceptions import UnauthorizedException, BadRequestException
 from errorhub.models import ErrorSeverity

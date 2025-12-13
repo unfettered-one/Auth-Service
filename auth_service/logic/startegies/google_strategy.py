@@ -2,9 +2,9 @@
 Strategy for Google authentication.
 """
 
-from logic.interfaces.iauth_strategy import IAuthStrategy
-from logic.repository.json_user_repository import IUserRepository
-from models.users import User
+from auth_service.logic.interfaces.iauth_strategy import IAuthStrategy
+from auth_service.logic.repository.json_user_repository import IUserRepository
+from auth_service.models.users import User
 
 from google.oauth2 import id_token
 from google.auth.transport import requests

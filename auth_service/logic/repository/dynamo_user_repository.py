@@ -4,8 +4,8 @@ Connection between DynamoDB users table and user service layer
 
 from typing import Type
 
-from logic.interfaces.iuser_respository import IUserRepository
-from models.users import User
+from auth_service.logic.interfaces.iuser_respository import IUserRepository
+from auth_service.models.users import User
 from auth_service.aws_proxy.utils import get_dynamodb_operations
 
 from auth_service.configuration import settings

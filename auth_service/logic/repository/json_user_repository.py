@@ -3,9 +3,9 @@ Connection between Database of users data and user service layer
 """
 
 import json
-from logic.interfaces.iuser_respository import IUserRepository
+from auth_service.logic.interfaces.iuser_respository import IUserRepository
 from auth_service.configuration import settings
-from models.users import User
+from auth_service.models.users import User
 
 
 class JsonUserRepository(IUserRepository):

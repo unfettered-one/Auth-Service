@@ -9,8 +9,8 @@ from fastapi.responses import JSONResponse, Response
 
 from errorhub.decorator import api_exception_handler
 
-from models.users import User, UserRequest
-from logic.factory import factory
+from auth_service.models.users import User, UserRequest
+from auth_service.logic.factory import factory
 from utils.helper import generate_user_id, raise_exception_if_not_valid_user
 from middleware.auth_dependency import get_current_user
 

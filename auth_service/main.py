@@ -7,8 +7,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from errorhub.exceptions import ErrorHubException
-from apis.user_apis import router as user_router
-from apis.auth_apis import router as auth_router
+from auth_service.apis.user_apis import router as user_router
+from auth_service.apis.auth_apis import router as auth_router
 
 from mangum import Mangum
 
@@ -40,4 +40,3 @@ async def errorhub_exception_handler(request: Request, exc: ErrorHubException):
     positional argument and the exception as the second.
     """
     return JSONResponse(status_code=exc.error_detail.code, content=exc.to_dict())
-

@@ -1,5 +1,5 @@
 from pydantic import Field, EmailStr
-from models.base import BaseModelForbidExtra
+from auth_service.models.base import BaseModelForbidExtra
 from datetime import datetime, UTC
 
 

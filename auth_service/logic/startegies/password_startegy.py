@@ -2,15 +2,15 @@
 Basic email/password authentication strategy
 """
 
-from logic.interfaces.iauth_strategy import IAuthStrategy
-from logic.interfaces.iuser_respository import IUserRepository
+from auth_service.logic.interfaces.iauth_strategy import IAuthStrategy
+from auth_service.logic.interfaces.iuser_respository import IUserRepository
 from utils.password import verify_password
 
 from errorhub.exceptions import NotFoundException, UnauthorizedException
 from errorhub.models import ErrorSeverity
 
 from auth_service.configuration import settings
-from models.users import User
+from auth_service.models.users import User
 
 
 class EmailPasswordStrategy(IAuthStrategy):

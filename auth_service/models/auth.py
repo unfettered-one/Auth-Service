@@ -1,5 +1,5 @@
-from models.base import BaseModelForbidExtra
-from models.users import UserResponse
+from auth_service.models.base import BaseModelForbidExtra
+from auth_service.models.users import UserResponse
 
 
 class LoginModel(BaseModelForbidExtra):

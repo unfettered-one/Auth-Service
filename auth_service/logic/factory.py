@@ -2,17 +2,17 @@
 Factory module that is used everywhere to create instances of services
 """
 
-from logic.repository.json_user_repository import JsonUserRepository
-from logic.repository.dynamo_user_repository import DynamoDBUserRepository
-from logic.services.user_service import UserService
-from logic.services.authentication_service import AuthenticationService
+from auth_service.logic.repository.json_user_repository import JsonUserRepository
+from auth_service.logic.repository.dynamo_user_repository import DynamoDBUserRepository
+from auth_service.logic.services.user_service import UserService
+from auth_service.logic.services.authentication_service import AuthenticationService
 
-from logic.interfaces.iauth_strategy import IAuthStrategy
-from logic.interfaces.iauthentication_service import IAuthenticationService
-from logic.services.jwt_token_service import JWTTokenService
+from auth_service.logic.interfaces.iauth_strategy import IAuthStrategy
+from auth_service.logic.interfaces.iauthentication_service import IAuthenticationService
+from auth_service.logic.services.jwt_token_service import JWTTokenService
 
-from logic.startegies.password_startegy import EmailPasswordStrategy
-from logic.startegies.google_strategy import GoogleAuthStrategy
+from auth_service.logic.startegies.password_startegy import EmailPasswordStrategy
+from auth_service.logic.startegies.google_strategy import GoogleAuthStrategy
 from auth_service.configuration import settings
 
 

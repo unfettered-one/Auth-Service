@@ -5,8 +5,8 @@ Service for handling JWT token generation, verification, revocation, and rotatio
 import jwt
 from datetime import datetime, timedelta, UTC
 
-from models.users import User
-from logic.interfaces.itoken_service import ITokenService
+from auth_service.models.users import User
+from auth_service.logic.interfaces.itoken_service import ITokenService
 
 
 class JWTTokenService(ITokenService):
