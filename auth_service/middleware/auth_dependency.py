@@ -11,7 +11,7 @@ from fastapi import HTTPException, Security
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 from logic.services.jwt_token_service import JWTTokenService
-from configuration import settings
+from auth_service.configuration import settings
 from errorhub.exceptions import UnauthorizedException, BadRequestException
 from errorhub.models import ErrorSeverity
 

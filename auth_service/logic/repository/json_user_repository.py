@@ -4,7 +4,7 @@ Connection between Database of users data and user service layer
 
 import json
 from logic.interfaces.iuser_respository import IUserRepository
-from configuration import settings
+from auth_service.configuration import settings
 from models.users import User
 
 

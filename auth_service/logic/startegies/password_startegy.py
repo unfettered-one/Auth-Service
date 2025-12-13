@@ -9,7 +9,7 @@ from utils.password import verify_password
 from errorhub.exceptions import NotFoundException, UnauthorizedException
 from errorhub.models import ErrorSeverity
 
-from configuration import settings
+from auth_service.configuration import settings
 from models.users import User
 
 

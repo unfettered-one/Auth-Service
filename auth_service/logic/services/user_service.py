@@ -9,7 +9,7 @@ from utils.password import hash_password
 from errorhub.exceptions import ConflictException, NotFoundException, BadRequestException
 from errorhub.models import ErrorSeverity
 
-from configuration import settings
+from auth_service.configuration import settings
 
 
 class UserService:

@@ -7,7 +7,7 @@ from logic.interfaces.iauth_strategy import IAuthStrategy
 from logic.interfaces.itoken_service import ITokenService
 from logic.interfaces.iuser_respository import IUserRepository
 
-from configuration import settings
+from auth_service.configuration import settings
 
 from models.users import User
 

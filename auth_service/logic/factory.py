@@ -13,7 +13,7 @@ from logic.services.jwt_token_service import JWTTokenService
 
 from logic.startegies.password_startegy import EmailPasswordStrategy
 from logic.startegies.google_strategy import GoogleAuthStrategy
-from configuration import settings
+from auth_service.configuration import settings
 
 
 class Factory:

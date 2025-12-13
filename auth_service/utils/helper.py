@@ -7,7 +7,7 @@ import uuid
 from errorhub.models import ErrorSeverity
 from errorhub.exceptions import ForbiddenException
 
-from configuration import settings
+from auth_service.configuration import settings
 
 
 async def generate_user_id() -> str:
