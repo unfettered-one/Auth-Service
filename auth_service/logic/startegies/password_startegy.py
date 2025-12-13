@@ -4,7 +4,7 @@ Basic email/password authentication strategy
 
 from auth_service.logic.interfaces.iauth_strategy import IAuthStrategy
 from auth_service.logic.interfaces.iuser_respository import IUserRepository
-from utils.password import verify_password
+from auth_service.utils.password import verify_password
 
 from errorhub.exceptions import NotFoundException, UnauthorizedException
 from errorhub.models import ErrorSeverity

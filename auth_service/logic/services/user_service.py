@@ -4,7 +4,7 @@ Connection between user apis and user repository.
 
 from auth_service.models.users import User
 from auth_service.logic.interfaces.iuser_respository import IUserRepository
-from utils.password import hash_password
+from auth_service.utils.password import hash_password
 
 from errorhub.exceptions import ConflictException, NotFoundException, BadRequestException
 from errorhub.models import ErrorSeverity

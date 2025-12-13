@@ -9,7 +9,7 @@ from auth_service.models.users import User
 from google.oauth2 import id_token
 from google.auth.transport import requests
 
-from utils.helper import generate_user_id
+from auth_service.utils.helper import generate_user_id
 from auth_service.configuration import settings
 
 from errorhub.exceptions import NotFoundException, ForbiddenException
