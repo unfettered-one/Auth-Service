@@ -23,8 +23,18 @@ class Settings:
         self._config = {}
         self._config["userJsonRecord"] = os.getenv("USER_JSON_RECORD", "data/user_records.json")
         self._config["userDynamoTable"] = os.getenv("USER_DYNAMO_TABLE", None)
-        self._config["environment"] = os.getenv("ENVIRONMENT", "development")
         self._jwt_secret_key = os.getenv("JWT_SECRET_KEY", None)
+        temp_env = os.getenv("ENVIRONMENT")
+        if temp_env is not None:
+            if temp_env == "production":
+                self._config["environment"] = EnvironmentEnum.PRODUCTION
+            elif temp_env == "staging":
+                self._config["environment"] = EnvironmentEnum.STAGING
+            else:
+                self._config["environment"] = EnvironmentEnum.DEVELOPMENT
+        else:
+            self._config["environment"] = EnvironmentEnum.DEVELOPMENT
+        self._config["environment"] = temp_env
 
     def load_env_variable(self):
         """
