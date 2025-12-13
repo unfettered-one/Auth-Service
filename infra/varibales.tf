@@ -1,5 +1,5 @@
 variable "stage" {
-  default     = "dev"
+  default     = "development"
   description = "The environment stage (e.g., dev, prod)"
   type        = string
 }

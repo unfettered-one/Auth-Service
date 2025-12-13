@@ -33,7 +33,7 @@ class EmailPasswordStrategy(IAuthStrategy):
                     "suggestion": "Register first please... or enter correct email",
                 },
             )
-        if user and verify_password(password, user.password_hash):
+        if user and await verify_password(password, user.password_hash):
             return user
         raise UnauthorizedException(
             service="Auth Service",
