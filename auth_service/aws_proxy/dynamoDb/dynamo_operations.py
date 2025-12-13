@@ -1,5 +1,5 @@
 from typing import Dict, Any, Optional
-from aws_proxy.dynamoDb.util import get_dynamodb_client
+from auth_service.aws_proxy.dynamoDb.util import get_dynamodb_client
 
 
 class DynamoDBOperations:
