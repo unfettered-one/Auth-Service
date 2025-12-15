@@ -17,6 +17,7 @@ module "auth_service" {
     USER_JSON_RECORD  = "data/user_records.json"
     USER_DYNAMO_TABLE = "${var.service_name}-user-records-${var.stage}"
     ENVIRONMENT       = var.stage
+    JWT_SECRET        = data.aws_ssm_parameter.jwt_secret.value
   }
 
   create_http_api     = false

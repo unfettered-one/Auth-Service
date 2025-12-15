@@ -16,6 +16,7 @@ from auth_service.logic.startegies.google_strategy import GoogleAuthStrategy
 from auth_service.configuration import settings
 
 from errorhub.exceptions import InternalServerErrorException
+from errorhub.models import ErrorSeverity
 
 
 class Factory:
@@ -53,7 +54,7 @@ class Factory:
             raise InternalServerErrorException(
                 service="Auth Service",
                 message="JWT secret is not configured",
-                severity="HIGH",
+                severity=ErrorSeverity.HIGH,
                 environment=settings.get_environment(),
                 context={
                     "detail": "The JWT secret key is missing in the configuration.",

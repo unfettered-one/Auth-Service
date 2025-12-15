@@ -22,7 +22,7 @@ if secret_key is None:
     raise InternalServerErrorException(
         service="Auth Service",
         message="JWT secret is not configured",
-        severity="HIGH",
+        severity=ErrorSeverity.HIGH,
         environment=settings.get_environment(),
         context={
             "detail": "The JWT secret key is missing in the configuration.",
