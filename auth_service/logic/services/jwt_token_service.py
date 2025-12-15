@@ -5,8 +5,8 @@ Service for handling JWT token generation, verification, revocation, and rotatio
 import jwt
 from datetime import datetime, timedelta, UTC
 
-from models.users import User
-from logic.interfaces.itoken_service import ITokenService
+from auth_service.models.users import User
+from auth_service.logic.interfaces.itoken_service import ITokenService
 
 
 class JWTTokenService(ITokenService):
@@ -101,6 +101,7 @@ class JWTTokenService(ITokenService):
 
     async def revoke_refresh_token(self, token: str) -> None:
         """Mark the refresh token as unusable."""
+        await self.verify_refresh_token(token)
         self.revoked_tokens.add(token)
 
     async def rotate_refresh_token(self, old_token: str) -> str | None:

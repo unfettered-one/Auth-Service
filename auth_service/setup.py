@@ -16,6 +16,8 @@ setup(
         "orjson==3.11.4",
         "PyJWT==2.10.1",
         "google-auth==2.43.0",
+        "mangum==0.19.0",
+        "boto3==1.42.4",
     ],
     extras_require={"dev": ["pylint"]},
     entry_points={

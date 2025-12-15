@@ -3,7 +3,7 @@ Interface/Abstract class for User Repository
 """
 
 from abc import ABC, abstractmethod
-from models.users import User
+from auth_service.models.users import User
 
 
 class IUserRepository(ABC):

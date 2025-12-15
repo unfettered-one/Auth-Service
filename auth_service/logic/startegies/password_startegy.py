@@ -2,15 +2,15 @@
 Basic email/password authentication strategy
 """
 
-from logic.interfaces.iauth_strategy import IAuthStrategy
-from logic.interfaces.iuser_respository import IUserRepository
-from utils.password import verify_password
+from auth_service.logic.interfaces.iauth_strategy import IAuthStrategy
+from auth_service.logic.interfaces.iuser_respository import IUserRepository
+from auth_service.utils.password import verify_password
 
 from errorhub.exceptions import NotFoundException, UnauthorizedException
 from errorhub.models import ErrorSeverity
 
-from configuration import settings
-from models.users import User
+from auth_service.configuration import settings
+from auth_service.models.users import User
 
 
 class EmailPasswordStrategy(IAuthStrategy):
@@ -33,7 +33,7 @@ class EmailPasswordStrategy(IAuthStrategy):
                     "suggestion": "Register first please... or enter correct email",
                 },
             )
-        if user and verify_password(password, user.password_hash):
+        if user and await verify_password(password, user.password_hash):
             return user
         raise UnauthorizedException(
             service="Auth Service",

@@ -9,10 +9,10 @@ from fastapi.responses import JSONResponse, Response
 
 from errorhub.decorator import api_exception_handler
 
-from models.users import User, UserRequest
-from logic.factory import factory
-from utils.helper import generate_user_id
-from middleware.auth_dependency import get_current_user
+from auth_service.models.users import User, UserRequest
+from auth_service.logic.factory import factory
+from auth_service.utils.helper import generate_user_id, raise_exception_if_not_valid_user
+from auth_service.middleware.auth_dependency import get_current_user
 
 router = APIRouter()
 
@@ -51,6 +51,7 @@ async def delete_user(user_id: str, token_data=Security(get_current_user)):
     """
     Api to delete a user by user_id
     """
+    await raise_exception_if_not_valid_user(user_id, token_data)
     user_service = factory.get_user_service()
     await user_service.delete_user(user_id)
     return Response(status_code=204)
@@ -62,6 +63,7 @@ async def get_user(user_id: str, email: str | None = None, token_data=Security(g
     """
     Api to get user information either by user_id or email
     """
+    await raise_exception_if_not_valid_user(user_id, token_data)
     user_service = factory.get_user_service()
     user = await user_service.get_user_info(user_id=user_id, user_email=email)
     return JSONResponse(status_code=200, content=user.model_dump(exclude={"password_hash"}))
@@ -78,6 +80,7 @@ async def update_user(
     """
     Api to update user or return proper exceptions for errors
     """
+    await raise_exception_if_not_valid_user(user_id, token_data)
     user_service = factory.get_user_service()
     user = await user_service.get_user_info(user_id=user_id, user_email=email)
     user.name = payload.name

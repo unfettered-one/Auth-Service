@@ -2,14 +2,14 @@
 Authentication service is layer between Auth strategies like email/password, google..etc and Auth apis
 """
 
-from logic.interfaces.iauthentication_service import IAuthenticationService
-from logic.interfaces.iauth_strategy import IAuthStrategy
-from logic.interfaces.itoken_service import ITokenService
-from logic.interfaces.iuser_respository import IUserRepository
+from auth_service.logic.interfaces.iauthentication_service import IAuthenticationService
+from auth_service.logic.interfaces.iauth_strategy import IAuthStrategy
+from auth_service.logic.interfaces.itoken_service import ITokenService
+from auth_service.logic.interfaces.iuser_respository import IUserRepository
 
-from configuration import settings
+from auth_service.configuration import settings
 
-from models.users import User
+from auth_service.models.users import User
 
 from errorhub.exceptions import UnauthorizedException, NotFoundException
 from errorhub.models import ErrorSeverity

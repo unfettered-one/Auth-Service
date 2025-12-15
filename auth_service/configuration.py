@@ -21,8 +21,20 @@ class Settings:
 
     def __init__(self) -> None:
         self._config = {}
-        self.load_env_variable()
+        self._config["userJsonRecord"] = os.getenv("USER_JSON_RECORD", "data/user_records.json")
+        self._config["userDynamoTable"] = os.getenv("USER_DYNAMO_TABLE", None)
         self._jwt_secret_key = os.getenv("JWT_SECRET_KEY", None)
+        temp_env = os.getenv("ENVIRONMENT")
+        if temp_env is not None:
+            if temp_env == "production":
+                self._config["environment"] = EnvironmentEnum.PRODUCTION
+            elif temp_env == "staging":
+                self._config["environment"] = EnvironmentEnum.STAGING
+            else:
+                self._config["environment"] = EnvironmentEnum.DEVELOPMENT
+        else:
+            self._config["environment"] = EnvironmentEnum.DEVELOPMENT
+
 
     def load_env_variable(self):
         """
@@ -49,17 +61,29 @@ class Settings:
         """
         return self._config.get("userJsonRecord", "No path found")
 
+    def get_user_dynamo_table_name(self) -> str | None:
+        """
+        DynamoDB table name for user records
+        """
+        return self._config.get("userDynamoTable")
+
     def get_environment(self) -> str:
         """
         Environment in which application is running
         """
-        return self._config.get("environment", "development")
+        return self._config["environment"]
 
     def get_jwt_secret(self) -> str | None:
         """
         Secret key for JWT token encoding/decoding
         """
         return self._jwt_secret_key
+
+    def get_aws_region(self) -> str:
+        """
+        AWS region for DynamoDB operations
+        """
+        return self._config.get("AWS_REGION", "ap-south-1")
 
 
 settings = Settings()
