@@ -101,6 +101,7 @@ class JWTTokenService(ITokenService):
 
     async def revoke_refresh_token(self, token: str) -> None:
         """Mark the refresh token as unusable."""
+        await self.verify_refresh_token(token)
         self.revoked_tokens.add(token)
 
     async def rotate_refresh_token(self, old_token: str) -> str | None:
