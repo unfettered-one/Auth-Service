@@ -9,7 +9,9 @@ from auth_service.models.users import User
 from auth_service.aws_proxy.utils import get_dynamodb_operations
 
 from auth_service.configuration import settings
-from errorhub.exceptions import NotFoundException
+from errorhub.exceptions import NotFoundException, InternalServerErrorException
+from errorhub.models import ErrorSeverity
+
 from errorhub.models import BaseModel
 
 
@@ -31,6 +33,8 @@ class DynamoDBUserRepository(IUserRepository):
         create user in DynamoDB
         """
         item = user.model_dump()
+        if "name" in item:
+            item["user_name"] = item.pop("name")
         item["pk"] = f"USER#{user.id}"
 
         self.users_table.create_item(item)
@@ -67,11 +71,12 @@ class DynamoDBUserRepository(IUserRepository):
         """
         filter data for user model
         """
-
+        if "user_name" in data:
+            data["name"] = data.pop("user_name")
         allowed_fields = set(model.model_fields.keys())
         return {k: v for k, v in data.items() if k in allowed_fields}
 
-    async def get_user_by_id(self, user_id: str):
+    async def get_user_by_id(self, user_id: str) -> User | None:
         """
         find user by id
         """
@@ -81,17 +86,39 @@ class DynamoDBUserRepository(IUserRepository):
             return User(**await self._filter_for_user_model(User, item))
         return None
 
-    async def update_user(self, user: User):
+    async def update_user(self, user: User) -> User:
         """
         update user in DynamoDB
         """
         key = {"pk": f"USER#{user.id}"}
 
-        update_expression = "SET email = :email"
+        update_expression = """
+            SET email = :email,
+                user_name = :name,
+                apps = :apps,
+                updated_at = :updated_at,
+                password_hash = :password_hash
+        """
 
-        expression_values = {":email": user.email}
+        expression_values = {
+            ":email": user.email,
+            ":name": user.name,
+            ":password_hash": user.password_hash,
+            ":apps": user.apps,
+            ":updated_at": user.updated_at,
+        }
 
         self.users_table.update_item(key=key, update_expression=update_expression, expression_values=expression_values)
+        new_user = await self.get_user_by_id(user.id)
+        if new_user is None:
+            raise InternalServerErrorException(
+                service="auth_service",
+                message="Failed to update user",
+                severity=ErrorSeverity.HIGH,
+                environment=settings.get_environment(),
+                context={"detail": f"User with id {user.id} not found after update."},
+            )
+        return new_user
 
     async def delete_user(self, user_id: str):
         """

@@ -59,15 +59,32 @@ class UserService:
 
         await self.user_repository.delete_user(user_id)
 
-    async def update_user_by_id(self, user_id: str, user: User) -> dict | User:
+    async def update_user_by_id(self, user_id: str, user: User) -> User:
         """
         Update user information by user_id.
         """
-        if await self.user_repository.get_user_by_id(user_id) is None:
-            return {"error": "User not found"}
-
-        await self.user_repository.update_user(user)
-        return user
+        old_user = await self.user_repository.get_user_by_id(user_id)
+        if old_user is None:
+            raise NotFoundException(
+                service="auth_service",
+                message="User not found",
+                severity=ErrorSeverity.LOW,
+                environment=settings.get_environment(),
+                context={"The user you are trying to update is not found": user_id},
+            )
+        if user.email != old_user.email and len(user.email) > 0:
+            old_user.email = user.email
+        if user.name != old_user.name:
+            old_user.name = user.name
+        if user.apps != old_user.apps and len(user.apps) > 0:
+            old_user.apps = user.apps
+        if user.password_hash != old_user.password_hash and len(user.password_hash) > 0:
+            hashed_password = await hash_password(user.password_hash)
+            old_user.password_hash = hashed_password
+        if user.updated_at:
+            old_user.updated_at = user.updated_at
+        new_user = await self.user_repository.update_user(old_user)
+        return new_user
 
     async def get_user_info(self, user_id: str | None, user_email: str | None) -> User:
         """

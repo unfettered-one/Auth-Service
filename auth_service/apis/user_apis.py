@@ -9,7 +9,7 @@ from fastapi.responses import JSONResponse, Response
 
 from errorhub.decorator import api_exception_handler
 
-from auth_service.models.users import User, UserRequest
+from auth_service.models.users import User, UserRequest, UpdateUserRequest
 from auth_service.logic.factory import factory
 from auth_service.utils.helper import generate_user_id, raise_exception_if_not_valid_user
 from auth_service.middleware.auth_dependency import get_current_user
@@ -30,6 +30,7 @@ async def register_user(
     Api to create user
     """
     user_id = await generate_user_id()
+
     user = User(
         id=user_id,
         name=payload.name,
@@ -74,7 +75,7 @@ async def get_user(user_id: str, email: str | None = None, token_data=Security(g
 async def update_user(
     user_id: str,
     token_data=Security(get_current_user),
-    payload: UserRequest = Body(..., embed=True),
+    payload: UpdateUserRequest = Body(..., embed=True),
     email: str | None = None,
 ):
     """
@@ -82,10 +83,14 @@ async def update_user(
     """
     await raise_exception_if_not_valid_user(user_id, token_data)
     user_service = factory.get_user_service()
-    user = await user_service.get_user_info(user_id=user_id, user_email=email)
-    user.name = payload.name
-    user.email = payload.email
-    user.password_hash = payload.password
-    user.updated_at = datetime.now(UTC).isoformat()
-    await user_service.update_user_by_id(user_id=user_id, user=user)
-    return JSONResponse(status_code=200, content=user.model_dump(exclude={"password_hash"}))
+    user = User(
+        id=user_id,
+        name=payload.name,
+        email=payload.email if payload.email is not None else "",
+        password_hash=payload.password if payload.password is not None else "",
+        apps=payload.app_name if payload.app_name is not None else [],
+        updated_at=datetime.now(UTC).isoformat(),
+        created_at="",  # This will be ignored in update
+    )
+    new_user = await user_service.update_user_by_id(user_id=user_id, user=user)
+    return JSONResponse(status_code=200, content=new_user.model_dump(exclude={"password_hash"}))

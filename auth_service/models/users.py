@@ -13,6 +13,13 @@ class User(BaseModelForbidExtra):
     apps: list[str] = []
 
 
+class UpdateUserRequest(BaseModelForbidExtra):
+    name: str | None = None
+    email: EmailStr | None = None
+    app_name: list[str] | None = None
+    password: str | None = None
+
+
 class UserRequest(BaseModelForbidExtra):
     name: str | None = None
     email: EmailStr

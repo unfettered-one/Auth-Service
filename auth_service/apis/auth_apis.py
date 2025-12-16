@@ -92,6 +92,7 @@ async def logout(logout_request: LogoutRequestModel = Body(...), token_data=Secu
 @api_exception_handler
 async def refresh_token(
     refresh_request: TokenRequestModel = Body(...),
+    
 ):
     """
     Refresh access token and refresh token
