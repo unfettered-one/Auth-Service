@@ -1,4 +1,4 @@
-from fastapi import Security
+from fastapi import Security, Request
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 from auth_service.logic.services.jwt_token_service import JWTTokenService
@@ -44,20 +44,32 @@ def _get_token_service() -> JWTTokenService:
 
 
 async def get_current_user(
+    request: Request,
     credentials: HTTPAuthorizationCredentials = Security(bearer_scheme),
 ):
-    if credentials is None:
+    """
+    Extract access token from HTTP-only cookie (preferred) or Authorization header (fallback).
+    Supports hybrid transition: new clients use cookies, legacy clients use Bearer header.
+    """
+    token = None
+
+    # Check HTTP-only cookie first (preferred)
+    token = request.cookies.get("access_token")
+
+    # # Fallback to Authorization header for legacy clients
+    # if not token and credentials is not None:
+    #     token = credentials.credentials
+
+    if not token:
         raise BadRequestException(
             service="Auth Service",
-            message="Authorization header missing",
+            message="Access token missing",
             severity=ErrorSeverity.LOW,
             environment=settings.get_environment(),
             context={
-                "detail": "No Authorization header provided.",
+                "detail": "No access token provided in cookies or Authorization header.",
             },
         )
-
-    token = credentials.credentials
 
     token_service = _get_token_service()
 

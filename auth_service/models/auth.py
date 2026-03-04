@@ -12,15 +12,22 @@ class LoginRequestModel(BaseModelForbidExtra):
 
 
 class LoginResponse(BaseModelForbidExtra):
+    """
+    Login response with user info only.
+    Tokens are returned as HTTP-only cookies, not in response body.
+    """
+
     user: UserResponse
-    access_token: str
-    refresh_token: str
-    token_type: str = "bearer"
-    expires_in: int = 900  # 15 minutes default
+    message: str = "Login successful"
+    token_type: str = "cookie"
 
 
 class LogoutModel(BaseModelForbidExtra):
-    refresh_token: str
+    """
+    Logout model - refresh token is extracted from cookies, not from body.
+    """
+
+    pass
 
 
 class LogoutRequestModel(BaseModelForbidExtra):
@@ -28,8 +35,11 @@ class LogoutRequestModel(BaseModelForbidExtra):
 
 
 class TokenModel(BaseModelForbidExtra):
-    access_token: str
-    refresh_token: str
+    """
+    Token refresh request model - tokens are extracted from cookies, not from body.
+    """
+
+    pass
 
 
 class TokenRequestModel(BaseModelForbidExtra):
@@ -37,5 +47,9 @@ class TokenRequestModel(BaseModelForbidExtra):
 
 
 class TokenRefreshResponse(BaseModelForbidExtra):
-    access_token: str
-    refresh_token: str
+    """
+    Token refresh response - tokens are returned as HTTP-only cookies, not in response body.
+    """
+
+    message: str = "Token refreshed successfully"
+    token_type: str = "cookie"

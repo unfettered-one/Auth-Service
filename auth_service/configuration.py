@@ -5,6 +5,7 @@ Module for managing application configuration settings.
 import os
 import json
 import logging
+from typing import Literal
 from errorhub.models import EnvironmentEnum
 
 from dotenv import load_dotenv
@@ -35,12 +36,11 @@ class Settings:
         else:
             self._config["environment"] = EnvironmentEnum.DEVELOPMENT
 
-
     def load_env_variable(self):
         """
         load config json file and env variables
         """
-        config_json = f'{os.getenv("CONFIG_PATH")}/config.json'
+        config_json = f"{os.getenv('CONFIG_PATH')}/config.json"
         LOGGER.info("Loading config file %s", config_json)
         with open(config_json, encoding="utf-8") as f:
             self._config = json.load(f)
@@ -84,6 +84,31 @@ class Settings:
         AWS region for DynamoDB operations
         """
         return self._config.get("AWS_REGION", "ap-south-1")
+
+    def get_cookie_secure_flag(self) -> bool:
+        """
+        Determine if cookies should be marked as Secure.
+        Returns True for all environments (dev, staging, prod) for consistency.
+        """
+        return True
+
+    def access_token_expiry_seconds(self) -> int:
+        """
+        Expiry time for access tokens in seconds
+        """
+        return self._config.get("ACCESS_TOKEN_EXPIRY_SECONDS", 900)
+
+    def refresh_token_expiry_seconds(self) -> int:
+        """
+        Expiry time for refresh tokens in seconds
+        """
+        return self._config.get("REFRESH_TOKEN_EXPIRY_SECONDS", 604800)
+
+    def cookie_samesite(self) -> Literal["strict", "lax", "none"]:
+        """
+        SameSite attribute for cookies
+        """
+        return self._config.get("COOKIE_SAMESITE", "none")
 
 
 settings = Settings()
