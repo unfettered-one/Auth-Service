@@ -12,7 +12,6 @@ from errorhub.models import ErrorSeverity
 from auth_service.models.auth import (
     LoginRequestModel,
     LoginResponse,
-    LogoutRequestModel,
     TokenRequestModel,
     TokenRefreshResponse,
 )
@@ -74,7 +73,6 @@ async def login(
 @api_exception_handler
 async def logout(
     request: Request,
-    logout_request: LogoutRequestModel = Body(...),
     token_data=Security(get_current_user),
 ):
     """

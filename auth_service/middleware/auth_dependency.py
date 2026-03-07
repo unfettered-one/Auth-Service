@@ -52,13 +52,17 @@ async def get_current_user(
     Supports hybrid transition: new clients use cookies, legacy clients use Bearer header.
     """
     token = None
+    token_source = None
 
     # Check HTTP-only cookie first (preferred)
     token = request.cookies.get("access_token")
+    if token:
+        token_source = "cookie"
 
-    # # Fallback to Authorization header for legacy clients
-    # if not token and credentials is not None:
-    #     token = credentials.credentials
+    # # Fallback to Authorization header for User APIs
+    if not token and credentials is not None:
+        token = credentials.credentials
+        token_source = "header"
 
     if not token:
         raise BadRequestException(
@@ -85,5 +89,5 @@ async def get_current_user(
                 "detail": "The provided access token is invalid or expired.",
             },
         )
-
+    payload["_token_source"] = token_source
     return payload

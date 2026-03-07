@@ -22,17 +22,6 @@ class LoginResponse(BaseModelForbidExtra):
     token_type: str = "cookie"
 
 
-class LogoutModel(BaseModelForbidExtra):
-    """
-    Logout model - refresh token is extracted from cookies, not from body.
-    """
-
-    pass
-
-
-class LogoutRequestModel(BaseModelForbidExtra):
-    data: LogoutModel
-
 
 class TokenModel(BaseModelForbidExtra):
     """
