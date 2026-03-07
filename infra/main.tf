@@ -1,5 +1,5 @@
 module "auth_service" {
-  source = "github.com/unfettered-one/Infra//core?ref=feat/multiple"
+  source = "github.com/unfettered-one/Infra//core?ref=fix/scr-tags"
 
   service_name = "auth-service"
   stage        = var.stage

@@ -12,7 +12,7 @@ jobs:
       id-token: write
       contents: read
       packages: write
-    uses: unfettered-one/Infra/.github/workflows/main.yml@main
+    uses: unfettered-one/Infra/.github/workflows/main.yml@9f652d66c541c662cf4e977f0bbf05d6adb3c2b6
     with:
       role_arn: "arn:aws:iam::815817733987:role/terraform-deploy-role-dev"
       aws_region: "ap-south-1"
@@ -20,7 +20,7 @@ jobs:
       lambda_code_path: "auth_service"
       build_image: true
       lambda_handler: "auth_service.main.mangum_handler"
-      # branch_name: "feat/lambda-url" #TODO remove after testing
+      branch_name: "fix/scr-tags" #TODO remove after testing
       service_name: "auth-service"
       stage: dev
       main_file: "main.py"
